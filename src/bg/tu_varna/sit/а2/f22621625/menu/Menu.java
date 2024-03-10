@@ -1,12 +1,13 @@
 package bg.tu_varna.sit.а2.f22621625.menu;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
 
 public class Menu {
-    private Map<Integer, MenuOption> menuOptions = new HashMap<>();
+    private List<MenuOption> menuOptions = new ArrayList<>();
     private static Menu menuInstance;
-
+    
     private Menu(){}
 
     public static Menu getInstance(){
@@ -18,18 +19,41 @@ public class Menu {
     }
 
     private void addOptions(){
-        menuOptions.put(1,new Open());
-        menuOptions.put(2,new Close());
-        menuOptions.put(3,new Save());
-        menuOptions.put(4,new SaveAs());
-        menuOptions.put(5,new Help());
-        menuOptions.put(6,new Exit());
+        menuOptions.add(new Open());
+        menuOptions.add(new Close());
+        menuOptions.add(new Save());
+        menuOptions.add(new SaveAs());
+        menuOptions.add(new Help());
+        menuOptions.add(new Exit());
     }
 
     public void printOptions(){
-        for (Map.Entry<Integer,MenuOption> key : menuOptions.entrySet()) {
-            System.out.printf("%d. %-18s%s%n", key.getKey(), key.getValue().getName(), key.getValue().info());
+        for (MenuOption option :menuOptions) {
+            System.out.printf("%-18s%s%n", option.getName(),option.info());
         }
     }
+   public void executeOption(String choice) {
+        boolean found=false;
+       for (MenuOption option :menuOptions) {
+           if (option.getCommand().equals(choice)) {
+               found=true;
+               option.execute();
+           }
+       }
+       if(!found){
+           System.out.println("Not a valid command");
+       }
+
+    }
+    public void run() {
+        Scanner scanner = new Scanner(System.in);
+        String choice="";
+        printOptions();
+        System.out.print("Enter your choice: ");
+        if(scanner.hasNext())
+            choice=scanner.next();
+        executeOption(choice);
+    }
+
 
 }

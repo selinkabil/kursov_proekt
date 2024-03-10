@@ -2,7 +2,11 @@ package bg.tu_varna.sit.а2.f22621625.menu;
 
 public class Exit implements MenuOption {
     private String name= "exit";
+    private String command="exit";
 
+    public String getCommand() {
+        return command;
+    }
     @Override
     public String getName() {
         return name;

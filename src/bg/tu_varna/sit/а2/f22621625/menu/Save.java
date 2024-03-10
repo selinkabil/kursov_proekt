@@ -2,7 +2,11 @@ package bg.tu_varna.sit.а2.f22621625.menu;
 
 public class Save implements MenuOption{
     private String name= "save";
+    private String command="save";
 
+    public String getCommand() {
+        return command;
+    }
     @Override
     public String getName() {
         return name;
