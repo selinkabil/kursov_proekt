@@ -28,7 +28,7 @@ public class Menu {
 
     public void printOptions(){
         for (Map.Entry<Integer,MenuOption> key : menuOptions.entrySet()) {
-            System.out.println(key.getKey() +". "+ key.getValue().getName());
+            System.out.printf("%d. %-18s%s%n", key.getKey(), key.getValue().getName(), key.getValue().info());
         }
     }
 
