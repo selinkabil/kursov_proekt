@@ -14,7 +14,7 @@ public class Close implements MenuOption{
 
     @Override
     public void execute() {
-        System.out.println("You selected option Close");
+        System.out.println("You selected option Close\n");
     }
 
     @Override

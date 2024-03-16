@@ -14,7 +14,7 @@ public class Save implements MenuOption{
 
     @Override
     public void execute() {
-        System.out.println("You selected option Save");
+        System.out.println("You selected option Save\n");
     }
 
     @Override

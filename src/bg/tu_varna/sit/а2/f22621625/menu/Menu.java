@@ -54,6 +54,4 @@ public class Menu {
             choice=scanner.next();
         executeOption(choice);
     }
-
-
 }

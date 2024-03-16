@@ -16,22 +16,11 @@ public class Help implements MenuOption{
     public void execute() {
         System.out.println("The following commands are supported:");
         Menu menu = Menu.getInstance();
-        menu.printOptions();
+        menu.run();
     }
     @Override
     public String info() {
         return "prints this information";
     }
-    public void printTitle(){
-        System.out.print("\n" +
-                ".___________. __    ______  __  ___  _______ .___________.     ______    _______  _______  __    ______  _______ \n" +
-                "|           ||  |  /      ||  |/  / |   ____||           |    /  __  \\  |   ____||   ____||  |  /      ||   ____|\n" +
-                "`---|  |----`|  | |  ,----'|  '  /  |  |__   `---|  |----`   |  |  |  | |  |__   |  |__   |  | |  ,----'|  |__   \n" +
-                "    |  |     |  | |  |     |    <   |   __|      |  |        |  |  |  | |   __|  |   __|  |  | |  |     |   __|  \n" +
-                "    |  |     |  | |  `----.|  .  \\  |  |____     |  |        |  `--'  | |  |     |  |     |  | |  `----.|  |____ \n" +
-                "    |__|     |__|  \\______||__|\\__\\ |_______|    |__|         \\______/  |__|     |__|     |__|  \\______||_______|\n" +
-                "                                                                                                                 \n");
 
-
-    }
 }
