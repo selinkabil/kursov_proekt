@@ -1,4 +1,6 @@
-package bg.tu_varna.sit.а2.f22621625;
+package bg.tu_varna.sit.а2.f22621625.models;
+
+import bg.tu_varna.sit.а2.f22621625.contracts.MenuItem;
 
 import java.io.File;
 import java.io.FileWriter;
