@@ -1,10 +1,10 @@
-package bg.tu_varna.sit.Ð°2.f22621625.models;
+package bg.tu_varna.sit.à2.f22621625.models;
 
-import bg.tu_varna.sit.Ð°2.f22621625.contracts.MenuItem;
+import bg.tu_varna.sit.à2.f22621625.contracts.MenuItem;
 
 public class ExitOption extends MenuField implements MenuItem {
-    private final String content = "> exit";
-    private final String info = "exit exists the program";
+    private final String content = "exit";
+    private final String info = "exit                exists the program";
 
     @Override
     public String getContent() {

@@ -1,6 +1,6 @@
-package bg.tu_varna.sit.Ð°2.f22621625.models;
+package bg.tu_varna.sit.à2.f22621625.models;
 
-import bg.tu_varna.sit.Ð°2.f22621625.contracts.MenuItem;
+import bg.tu_varna.sit.à2.f22621625.contracts.MenuItem;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -8,8 +8,8 @@ import java.io.IOException;
 import java.util.Scanner;
 
 public class SaveAsOption extends MenuField implements MenuItem {
-    private final String content = "> saveas ";
-    private final String info = "saveas <file> saves the currently open file in <file>";
+    private final String content = "saveas";
+    private final String info = "saveas <file>       saves the currently open file in <file>";
 
     @Override
     public String getContent() {
@@ -33,7 +33,7 @@ public class SaveAsOption extends MenuField implements MenuItem {
             writer.write(super.getOpenedFileContent());
             writer.close();
             System.out.println("File saved successfully!");
-            } catch (IOException e) {
+            } catch (IOException | NullPointerException  e) {
                 System.out.println("Error saving file as: " + e.getMessage());
             }
         }

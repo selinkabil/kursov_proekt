@@ -1,6 +1,6 @@
-package bg.tu_varna.sit.Ð°2.f22621625.models;
+package bg.tu_varna.sit.à2.f22621625.models;
 
-import bg.tu_varna.sit.Ð°2.f22621625.contracts.MenuItem;
+import bg.tu_varna.sit.à2.f22621625.contracts.MenuItem;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -9,8 +9,8 @@ import java.io.IOException;
 import java.util.Scanner;
 
 public class OpenOption extends MenuField implements MenuItem {
-    private final String content = "> open ";
-    private final String info = "open <file> opens <file>";
+    private final String content = "open";
+    private final String info = "open <file>         opens <file>";
 
 
     public OpenOption() {
