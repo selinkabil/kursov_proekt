@@ -1,4 +1,4 @@
-package bg.tu_varna.sit.à2.f22621625.models;
+package bg.tu_varna.sit.à2.f22621625.menu;
 
 
 public class MenuField {

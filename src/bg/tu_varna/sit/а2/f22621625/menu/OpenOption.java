@@ -1,4 +1,4 @@
-package bg.tu_varna.sit.à2.f22621625.models;
+package bg.tu_varna.sit.à2.f22621625.menu;
 
 import bg.tu_varna.sit.à2.f22621625.contracts.MenuItem;
 
@@ -43,10 +43,10 @@ public class OpenOption extends MenuField implements MenuItem {
                 fileContent.append(line).append("\n");
             }
             reader.close();
-            System.out.println("File opened successfully!");
+            System.out.println("\nSuccessfully opened "+super.getOpenedFilePath());
             super.setOpenedFileContent(scanner.nextLine());
         } catch (IOException e) {
-            System.out.println("Error opening file: " + e.getMessage());
+            System.out.println("\nError opening file: " + e.getMessage());
         }
     }
 }

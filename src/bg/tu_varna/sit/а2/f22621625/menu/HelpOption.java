@@ -1,6 +1,7 @@
-package bg.tu_varna.sit.à2.f22621625.models;
+package bg.tu_varna.sit.à2.f22621625.menu;
 
 import bg.tu_varna.sit.à2.f22621625.contracts.MenuItem;
+import bg.tu_varna.sit.à2.f22621625.models.Menu;
 
 public class HelpOption extends MenuField implements MenuItem {
 
@@ -19,7 +20,7 @@ public class HelpOption extends MenuField implements MenuItem {
 
     @Override
     public void performAction() {
-        System.out.println("The following commands are supported");
+        System.out.println("\nThe following commands are supported");
         Menu menu = new Menu();
         menu.displayMenu();
     }

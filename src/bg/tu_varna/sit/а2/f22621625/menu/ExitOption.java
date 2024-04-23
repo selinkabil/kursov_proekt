@@ -1,4 +1,4 @@
-package bg.tu_varna.sit.à2.f22621625.models;
+package bg.tu_varna.sit.à2.f22621625.menu;
 
 import bg.tu_varna.sit.à2.f22621625.contracts.MenuItem;
 
@@ -18,7 +18,7 @@ public class ExitOption extends MenuField implements MenuItem {
 
     @Override
     public void performAction() {
-        System.out.println("Exiting the program...");
+        System.out.println("\nExiting the program...");
         System.exit(0);
     }
 }

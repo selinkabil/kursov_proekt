@@ -1,4 +1,4 @@
-package bg.tu_varna.sit.à2.f22621625.models;
+package bg.tu_varna.sit.à2.f22621625.menu;
 
 import bg.tu_varna.sit.à2.f22621625.contracts.MenuItem;
 
@@ -28,9 +28,9 @@ public class SaveOption extends MenuField implements MenuItem {
             FileWriter writer = new FileWriter(super.getOpenedFilePath());
             writer.write(super.getOpenedFileContent());
             writer.close();
-            System.out.println("File saved successfully!");
+            System.out.println("\nSuccessfully saved "+super.getOpenedFilePath());
         } catch (IOException | NullPointerException e) {
-            System.out.println("Error saving file: " + e.getMessage());
+            System.out.println("\nError saving file: " + e.getMessage());
         }
     }
 }
