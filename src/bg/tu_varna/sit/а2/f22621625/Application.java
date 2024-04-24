@@ -11,9 +11,11 @@ public class Application {
 
 
         TicketHandle ticketHandle = new TicketHandle();
-        Date eventDate1 = new Date(); // Today's date for simplicity
-        Date eventDate2 = new Date(eventDate1.getTime() + (1000 * 60 * 60 * 24)); // Tomorrow
+        String date1="1.12.2023";
         String eventName1 = "Concert";
+        /*Date eventDate1 = new Date(); // Today's date for simplicity
+        Date eventDate2 = new Date(eventDate1.getTime() + (1000 * 60 * 60 * 24)); // Tomorrow
+
         String eventName2 = "Opera";
 
         // Create halls with seats
@@ -24,7 +26,7 @@ public class Application {
 
         // Adding events
         try {
-            ticketHandle.addEvent(eventDate1, halls1, eventName1);
+
             ticketHandle.addEvent(eventDate2, halls2, eventName2);
         } catch (Exception e) {
             System.out.println(e.getMessage());
@@ -53,7 +55,7 @@ public class Application {
 
         // Displaying the status after unbooking a seat for the first event
         ticketHandle.freeSeats(eventDate1, eventName1);
-        ticketHandle.bookings(eventDate1, eventName1);
+        ticketHandle.bookings(eventDate1, eventName1);*/
 
         menu.displayMenu();
     }

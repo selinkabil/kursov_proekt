@@ -7,10 +7,10 @@ import java.util.Objects;
 
 public class Event {
     private String name;
-    private Date date;
+    private String date;
     private Hall hall;
 
-    public Event(String name, Date date, Hall halls) {
+    public Event(String name, String date, Hall halls) {
         this.name = name;
         this.date = date;
         this.hall = halls;
@@ -33,7 +33,7 @@ public class Event {
         return name;
     }
 
-    public Date getDate() {
+    public String getDate() {
         return date;
     }
 

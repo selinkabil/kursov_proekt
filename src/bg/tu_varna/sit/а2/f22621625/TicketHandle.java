@@ -3,19 +3,45 @@ package bg.tu_varna.sit.à2.f22621625;
 
 import bg.tu_varna.sit.à2.f22621625.exceptions.DuplicateEventException;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
-import java.util.Set;
+import java.util.*;
 
 public class TicketHandle {
     private Set<Event> events = new HashSet<>();
     private Map<String, Ticket> tickets = new HashMap<>();
+    private List<Hall> halls = new ArrayList<>();
 
-    public void addEvent(Date date, Hall hall, String name) {
+    public TicketHandle() {
+        initHalls();
+    }
+
+    public Set<Event> getEvents() {
+        return events;
+    }
+
+    public Map<String, Ticket> getTickets() {
+        return tickets;
+    }
+
+    public List<Hall> getHalls() {
+        return halls;
+    }
+
+    public Hall findHallByNumber(int number){
+        for(Hall h: halls){
+            if(h.getNumber()==number)
+                return h;
+        }
+        return null;
+    }
+    private void initHalls(){
+        halls.add(new Hall(1,2,5));
+        halls.add(new Hall(2,5,5));
+        halls.add(new Hall(3,1,5));
+        halls.add(new Hall(4,6,6));
+
+    }
+
+    public void addEvent(String date, Hall hall, String name) {
         Event newEvent = new Event(name, date, hall);
         if (events.contains(newEvent)) {
             System.out.println("An event with the given date already exists.");
@@ -140,12 +166,12 @@ public class TicketHandle {
         }
         return null;
     }
-    public void report(Date from, Date to) {
+    public void report(String from, String to) {
         System.out.println("Report for all halls from " + from + " to " + to + ":");
         generateReport(from, to, null);
     }
 
-    public void report(Date from, Date to, Hall hallName) {
+    public void report(String from, String to, Hall hallName) {
         System.out.println("Report for hall " + hallName.getNumber() + " from " + from + " to " + to + ":");
         generateReport(from, to, hallName);
     }
@@ -155,12 +181,14 @@ public class TicketHandle {
         generateReport(null, null, hallname);
     }
 
-    private void generateReport(Date from, Date to, Hall hallName) {
+    // TODO: FIX THE DATE COMPARISON
+
+    private void generateReport(String from, String to, Hall hallName) {
         Map<String, Integer> hallTicketsSold = new HashMap<>();
         for (Map.Entry<String, Ticket> ticketEntry : tickets.entrySet()) {
             Ticket ticket = ticketEntry.getValue();
             Event event = ticket.getEvent();
-            if ((from == null || event.getDate().after(from)) && (to == null || event.getDate().before(to)) && (hallName == null || isEventInHall(event, hallName))) {
+            if ((from == null || event.getDate().compareTo(from)==1) && (to == null || event.getDate().compareTo(to)==-1) && (hallName == null || isEventInHall(event, hallName))) {
                 hallTicketsSold.put(event.getName(), hallTicketsSold.getOrDefault(event.getName(), 0) + 1);
             }
         }

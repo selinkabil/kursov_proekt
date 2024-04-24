@@ -1,7 +1,9 @@
 package bg.tu_varna.sit.à2.f22621625.models;
 
 import bg.tu_varna.sit.à2.f22621625.TicketHandle;
+import bg.tu_varna.sit.à2.f22621625.contracts.MenuItem;
 import bg.tu_varna.sit.à2.f22621625.exceptions.NoOpenedFileException;
+import bg.tu_varna.sit.à2.f22621625.menu.*;
 
 import java.io.*;
 import java.util.HashMap;
@@ -9,10 +11,13 @@ import java.util.Map;
 import java.util.Scanner;
 
 public class Menu {
-    private Scanner scanner;
     private Map<String, Runnable> commands;
     private String currentContent;
     private File currentFile;
+    TicketHandle ticketSystem = new TicketHandle();
+    FileManager fileManager = new FileManager();
+    Scanner scanner = new Scanner(System.in);
+    Map<String, MenuItem> actions = new HashMap<>();
 
     public Menu() {
         this.scanner = new Scanner(System.in);
@@ -34,8 +39,8 @@ public class Menu {
             System.out.print("> ");
             String command = scanner.next();
 
-            if (commands.containsKey(command)) {
-                commands.get(command).run();
+            if (actions.containsKey(command)) {
+                actions.get(command).performAction();
             } else {
                 System.out.println("Unknown command. Try again.");
             }
@@ -43,6 +48,12 @@ public class Menu {
     }
 
     private void initializeCommands() {
+        actions.put("addevent",new AddEventOption(ticketSystem, scanner));
+        actions.put("book", new BookTicketOption(ticketSystem, scanner));
+        actions.put("open", new OpenOption(fileManager, scanner));
+        actions.put("save", new SaveOption(fileManager, scanner));
+        actions.put("exit",  new ExitOption());
+
         TicketHandle ticketHandle = new TicketHandle();
         commands.put("open", this::openFile);
         commands.put("close", this::close);
