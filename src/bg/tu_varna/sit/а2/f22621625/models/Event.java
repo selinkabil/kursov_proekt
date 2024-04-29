@@ -1,8 +1,5 @@
-package bg.tu_varna.sit.à2.f22621625;
+package bg.tu_varna.sit.à2.f22621625.models;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 import java.util.Objects;
 
 public class Event {
@@ -41,9 +38,6 @@ public class Event {
         return hall;
     }
 
-    public void setHalls(Hall hall) {
-        this.hall = hall;
-    }
 
     @Override
     public String toString() {

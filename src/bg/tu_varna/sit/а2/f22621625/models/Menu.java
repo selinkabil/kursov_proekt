@@ -1,8 +1,6 @@
 package bg.tu_varna.sit.а2.f22621625.models;
 
-import bg.tu_varna.sit.а2.f22621625.TicketHandle;
 import bg.tu_varna.sit.а2.f22621625.contracts.MenuItem;
-import bg.tu_varna.sit.а2.f22621625.exceptions.NoOpenedFileException;
 import bg.tu_varna.sit.а2.f22621625.menu.*;
 
 import java.io.*;
@@ -11,17 +9,15 @@ import java.util.Map;
 import java.util.Scanner;
 
 public class Menu {
-    private Map<String, Runnable> commands;
     private String currentContent;
     private File currentFile;
     TicketHandle ticketSystem = new TicketHandle();
     FileManager fileManager = new FileManager();
-    Scanner scanner = new Scanner(System.in);
+    Scanner scanner;
     Map<String, MenuItem> actions = new HashMap<>();
 
     public Menu() {
         this.scanner = new Scanner(System.in);
-        this.commands = new HashMap<>();
         this.currentContent = "";
         this.currentFile = null;
         initializeCommands();
@@ -29,14 +25,27 @@ public class Menu {
 
     public void displayMenu() {
         title();
-        System.out.println("open <file>         opens <file>");
-        System.out.println("close               closes currently opened file");
-        System.out.println("save                saves the currently open file");
-        System.out.println("saveas <file>       saves the currently open file in <file>");
-        System.out.println("help                prints this information");
-        System.out.println("exit                exists the program");
+        System.out.println("open <file>                                 opens <file>");
+        System.out.println("close                                       closes currently opened file");
+        System.out.println("save                                        saves the currently open file");
+        System.out.println("saveas <file>                               saves the currently open file in <file>");
+        System.out.println("help                                        prints this information");
+        System.out.println("exit                                        exists the program");
+        System.out.println("addevent <name> <date> <hall>               adds event on date <date> called <name> at hall with number <hall>");
+        System.out.println("book <row> <seat> <date> <name> <note>      books a ticket for event <name> at date <date> for row <row> and seat <seat> number, adds note");
+        System.out.println("freeseats <date> <name>                     prints all free seats for event with name <name> on date <date>");
+        System.out.println("buy <row> <seat> <date> <name>              buys a ticket for <row> and <seat> number for event with <name> on <date>");
+        System.out.println("bookings [<date>] [<name>]                  Returns a list of reserved but unpaid tickets for a performance named <name> on <date>. If <name> is omitted, returns information about all performances on the given date. If <date> is omitted, returns information for all dates.");
+        System.out.println("check <code>                                Performs a ticket validity check by extracting the seat number from the given <code> code");
+        System.out.println("report <from> <to> [<hall>]                 Извежда справка за закупени билети от дата <from> до дата <to> в зала <hall>");
+
+    }
+
+    public void handleMenuOptions(){
+        displayMenu();
         while (true) {
             System.out.print("> ");
+
             String command = scanner.next();
 
             if (actions.containsKey(command)) {
@@ -48,97 +57,19 @@ public class Menu {
     }
 
     private void initializeCommands() {
+        actions.put("open", new OpenOption(fileManager, scanner));
+        actions.put("close", new CloseOption(fileManager));
+        actions.put("save", new SaveOption(fileManager, scanner));
+        actions.put("saveas", new SaveAsOption(fileManager,scanner));
+        actions.put("help", new HelpOption());
+        actions.put("exit",  new ExitOption(scanner));
         actions.put("addevent",new AddEventOption(ticketSystem, scanner));
         actions.put("book", new BookTicketOption(ticketSystem, scanner));
-        actions.put("open", new OpenOption(fileManager, scanner));
-        actions.put("save", new SaveOption(fileManager, scanner));
-        actions.put("exit",  new ExitOption());
-
-        TicketHandle ticketHandle = new TicketHandle();
-        commands.put("open", this::openFile);
-        commands.put("close", this::close);
-        commands.put("save", this::saveFile);
-        commands.put("saveas", this::saveFileAs);
-        commands.put("help", this::help);
-        commands.put("exit", this::exit);
-    }
-
-    private void openFile() {
-        String filename = scanner.nextLine();
-        try {
-            currentFile = new File(filename);
-            if (!currentFile.exists()) {
-                currentFile.createNewFile();
-                System.out.println("File does not exist. A new file has been created.");
-            }
-            BufferedReader reader = new BufferedReader(new FileReader(currentFile));
-            StringBuilder builder = new StringBuilder();
-            String line;
-            while ((line = reader.readLine()) != null) {
-                builder.append(line).append(System.lineSeparator());
-            }
-            reader.close();
-            currentContent = builder.toString();
-            System.out.println("File opened successfully. Current content loaded. You can now add more text.");
-
-            System.out.println("Type the content you wish to add (type '/' on a new line to stop):");
-            while (!(line = scanner.nextLine()).equals("/")) {
-                currentContent += line + System.lineSeparator();
-            }
-            System.out.println("New content added. Use 'save' or 'saveas' to save changes to disk.");
-
-        } catch (IOException e) {
-            System.out.println("Failed to open file: " + e.getMessage());
-        }
-    }
-
-    private void saveFile()  {
-
-        try {
-            if (currentFile == null) {
-            throw new NoOpenedFileException("No currently opened file");
-        }
-            BufferedWriter writer = new BufferedWriter(new FileWriter(currentFile));
-            writer.write(currentContent);
-            writer.close();
-            System.out.println("File saved successfully.");
-        } catch (IOException | NoOpenedFileException e) {
-            System.out.println("Failed to save file: " + e.getMessage());
-        }
-    }
-
-    private void saveFileAs() {
-        System.out.println("Enter new file name:");
-        String filename = scanner.nextLine();
-        try {
-            if (currentFile == null) {
-                throw new NoOpenedFileException("No currently opened file");
-            }
-            File file = new File(filename);
-            BufferedWriter writer = new BufferedWriter(new FileWriter(file));
-            writer.write(currentContent);
-            writer.close();
-            currentFile = file;
-            System.out.println("File saved as '" + filename + "' successfully.");
-        } catch (IOException | NoOpenedFileException e) {
-            System.out.println("Failed to save file: " + e.getMessage());
-        }
-    }
-    private void close(){
-        if(currentFile.exists())
-            System.out.println("\nSuccessfully closed "+currentFile);
-        else
-            System.out.println("\nNo opened file");
-        currentContent="";
-        currentFile=null;
-    }
-    private void help(){
-        System.out.println("\nThe following commands are supported");
-        displayMenu();
-    }
-    private void exit(){
-        System.out.println("\nExiting the program...");
-        System.exit(0);
+        actions.put("freeseats", new FreeSeatsOption(ticketSystem,scanner));
+        actions.put("buy",new BuyOption(ticketSystem,scanner));
+        actions.put("bookings", new BookingOption(ticketSystem,scanner));
+        actions.put("check", new CheckOption(ticketSystem,scanner));
+        actions.put("report", new ReportOption(ticketSystem,scanner));
     }
     private void title(){
         System.out.println(" \n" +

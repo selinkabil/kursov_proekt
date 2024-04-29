@@ -2,23 +2,19 @@ package bg.tu_varna.sit.à2.f22621625.menu;
 
 import bg.tu_varna.sit.à2.f22621625.contracts.MenuItem;
 
-public class ExitOption extends MenuField implements MenuItem {
-    private final String content = "exit";
-    private final String info = "exit                exists the program";
+import java.util.Scanner;
 
-    @Override
-    public String getContent() {
-        return content;
-    }
+public class ExitOption implements MenuItem {
+    private final Scanner scanner;
 
-    @Override
-    public String getInfo() {
-        return info;
+    public ExitOption(Scanner scanner) {
+        this.scanner = scanner;
     }
 
     @Override
     public void performAction() {
         System.out.println("\nExiting the program...");
+        scanner.close();
         System.exit(0);
     }
 }

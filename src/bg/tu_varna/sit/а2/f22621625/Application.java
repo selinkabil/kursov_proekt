@@ -1,9 +1,6 @@
 package bg.tu_varna.sit.à2.f22621625;
 
-import bg.tu_varna.sit.à2.f22621625.contracts.MenuItem;
 import bg.tu_varna.sit.à2.f22621625.models.*;
-
-import java.util.Date;
 
 public class Application {
     public static void main(String[] args) {
@@ -57,6 +54,6 @@ public class Application {
         ticketHandle.freeSeats(eventDate1, eventName1);
         ticketHandle.bookings(eventDate1, eventName1);*/
 
-        menu.displayMenu();
+        menu.handleMenuOptions();
     }
 }

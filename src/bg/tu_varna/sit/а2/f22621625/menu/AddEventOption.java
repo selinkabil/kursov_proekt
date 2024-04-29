@@ -1,18 +1,16 @@
 package bg.tu_varna.sit.à2.f22621625.menu;
 
-import bg.tu_varna.sit.à2.f22621625.Event;
-import bg.tu_varna.sit.à2.f22621625.Hall;
-import bg.tu_varna.sit.à2.f22621625.TicketHandle;
+import bg.tu_varna.sit.à2.f22621625.models.Event;
+import bg.tu_varna.sit.à2.f22621625.models.Hall;
+import bg.tu_varna.sit.à2.f22621625.models.TicketHandle;
 import bg.tu_varna.sit.à2.f22621625.contracts.MenuItem;
+import bg.tu_varna.sit.à2.f22621625.exceptions.DuplicateEventException;
 
-import java.util.Date;
 import java.util.Scanner;
 
 public class AddEventOption implements MenuItem {
-    private String  info = "";
-    private TicketHandle ticketSystem;
-    private Scanner scanner;
-    private String content="";
+    private final TicketHandle ticketSystem;
+    private final Scanner scanner;
 
     public AddEventOption(TicketHandle ticketSystem, Scanner scanner) {
         this.ticketSystem = ticketSystem;
@@ -27,20 +25,15 @@ public class AddEventOption implements MenuItem {
         Hall hall = ticketSystem.findHallByNumber(number);
         Event newEvent = new Event(name, date, hall);
         if (ticketSystem.getEvents().contains(newEvent)) {
-            System.out.println("An event with the given date already exists.");
+            try {
+                throw new DuplicateEventException("An event with the given date already exists.");
+            } catch (DuplicateEventException e) {
+                System.out.println(e.getMessage());
+            }
         } else {
             ticketSystem.getEvents().add(newEvent);
             System.out.println("Successfully added event: " + name);
         }
     }
 
-    @Override
-    public String getInfo() {
-        return info;
-    }
-
-    @Override
-    public String getContent() {
-        return content;
-    }
 }

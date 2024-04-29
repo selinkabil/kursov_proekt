@@ -1,4 +1,4 @@
-package bg.tu_varna.sit.à2.f22621625;
+package bg.tu_varna.sit.à2.f22621625.models;
 
 public class Seat {
     private int row;

@@ -2,27 +2,16 @@ package bg.tu_varna.sit.à2.f22621625.menu;
 
 import bg.tu_varna.sit.à2.f22621625.contracts.MenuItem;
 
-public class CloseOption extends MenuField implements MenuItem {
-    private final String content = "close";
-    private final String info = "close               closes currently opened file";
+public class CloseOption implements MenuItem {
 
-    @Override
-    public String getContent() {
-        return content;
-    }
+    private final FileManager fileManager;
 
-    @Override
-    public String getInfo() {
-        return info;
+    public CloseOption(FileManager fileManager) {
+        this.fileManager = fileManager;
     }
 
     @Override
     public void performAction() {
-        if(getOpenedFilePath()!=null)
-        System.out.println("\nSuccessfully closed "+super.getOpenedFilePath());
-        else
-            System.out.println("\nNo opened file");
-        setOpenedFileContent(null);
-        setOpenedFilePath(null);
+        fileManager.closeCurrentFile();
     }
 }

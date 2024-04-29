@@ -4,11 +4,9 @@ import bg.tu_varna.sit.à2.f22621625.contracts.MenuItem;
 
 import java.util.Scanner;
 
-public class OpenOption extends MenuField implements MenuItem {
-    private final String content = "open";
-    private final String info = "open <file>         opens <file>";
-    private FileManager fileManager;
-    private Scanner scanner;
+public class OpenOption implements MenuItem {
+    private final FileManager fileManager;
+    private final Scanner scanner;
 
     public OpenOption(FileManager fileManager, Scanner scanner) {
         this.fileManager = fileManager;
@@ -16,18 +14,8 @@ public class OpenOption extends MenuField implements MenuItem {
     }
 
     @Override
-    public String getContent() {
-        return content;
-    }
-
-    public String getInfo() {
-        return info;
-    }
-
-    @Override
     public void performAction() {
-        System.out.print("Enter file name to open: ");
-        String fileName = scanner.nextLine();
+        String fileName = scanner.next();
         fileManager.openFile(fileName);
     }
 }

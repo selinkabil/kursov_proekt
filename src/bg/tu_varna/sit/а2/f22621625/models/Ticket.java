@@ -1,12 +1,12 @@
-package bg.tu_varna.sit.à2.f22621625;
+package bg.tu_varna.sit.à2.f22621625.models;
 
 public class Ticket {
     private Event event;
-    private Seat seat;
-    private String note;
+    private final Seat seat;
+    private final String note;
     private boolean paid;
 
-    public Ticket(Event event, int row, Seat seat, String note) {
+    public Ticket(Event event, Seat seat, String note) {
         this.event = event;
         this.seat = seat;
         this.note = note;
@@ -22,18 +22,6 @@ public class Ticket {
 
     public Seat getSeat() {
         return seat;
-    }
-
-    public void setSeat(Seat seat) {
-        this.seat = seat;
-    }
-
-    public String getNote() {
-        return note;
-    }
-
-    public void setNote(String note) {
-        this.note = note;
     }
 
     public boolean isPaid() {

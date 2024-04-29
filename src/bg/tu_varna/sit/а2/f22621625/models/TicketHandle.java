@@ -1,14 +1,12 @@
-package bg.tu_varna.sit.à2.f22621625;
+package bg.tu_varna.sit.à2.f22621625.models;
 
-
-import bg.tu_varna.sit.à2.f22621625.exceptions.DuplicateEventException;
 
 import java.util.*;
 
 public class TicketHandle {
-    private Set<Event> events = new HashSet<>();
-    private Map<String, Ticket> tickets = new HashMap<>();
-    private List<Hall> halls = new ArrayList<>();
+    private final Set<Event> events = new HashSet<>();
+    private final Map<String, Ticket> tickets = new HashMap<>();
+    private final List<Hall> halls = new ArrayList<>();
 
     public TicketHandle() {
         initHalls();
@@ -51,21 +49,10 @@ public class TicketHandle {
         }
     }
 
-    public void book(int row,int seat,Date date,String note,String name){
-        StringBuilder sb = new StringBuilder();
-        String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-        Random random=new Random();
-        sb.append(row);
-        sb.append(seat);
-        for(int i=0; i<6; i++){
-            sb.append(characters.charAt(random.nextInt(characters.length())));
-        }
-        Ticket ticket = new Ticket(findEvent(date,name),row,new Seat(row,seat),note);
-        ticket.getEvent().getHalls().findSeatByRowNumber(row,seat).setBooked(true);
-        ticket.getSeat().setBooked(true);
-        tickets.put(sb.toString(),ticket);
+    public void book(int row,int seat,String date,String note,String name){
+
     }
-    private String findTicketKey(Seat seat, Date date,String name) {
+    public String findTicketKey(Seat seat, String date,String name) {
         Event event = findEvent(date,name);
         if (event == null) {
             System.out.println("No event found on this date.");
@@ -81,7 +68,7 @@ public class TicketHandle {
         return null;
     }
 
-    public void unbook(int row,int seat, Date date,String name) {
+    public void unbook(int row,int seat, String date,String name) {
         String ticketKey = findTicketKey(new Seat(row,seat), date,name);
         if (ticketKey != null) {
             tickets.get(ticketKey).getSeat().setBooked(false);
@@ -94,7 +81,7 @@ public class TicketHandle {
     }
 
 
-    public void buy(int row, int seat, Date date,String name) {
+    public void buy(int row, int seat, String date,String name) {
         String ticketKey = findTicketKey(new Seat(row,seat), date,name);
         if (ticketKey != null) {
             tickets.get(ticketKey).setPaid(true);
@@ -105,7 +92,7 @@ public class TicketHandle {
     }
 
 
-    public Event findEvent(Date date,String name){
+    public Event findEvent(String date,String name){
         Event event = null;
         for (Event e : events) {
             if (e.getDate().equals(date)&& e.getName().equals(name)) {
@@ -116,7 +103,7 @@ public class TicketHandle {
         return event;
     }
 
-    public void freeSeats(Date date, String eventName) {
+    public void freeSeats(String date, String eventName) {
         Event event = findEvent(date, eventName);
         if (event != null) {
             System.out.println("Free seats for event: " + eventName + " on " + date);
@@ -129,7 +116,7 @@ public class TicketHandle {
         }
     }
 
-    public void bookings(Date date, String eventName) {
+    public void bookings(String date, String eventName) {
         Event event = findEvent(date, eventName);
         if (event != null) {
             System.out.println("Booked tickets:");
@@ -198,7 +185,7 @@ public class TicketHandle {
         }
     }
 
-    private boolean isEventInHall(Event event, Hall hall) {
+    public boolean isEventInHall(Event event, Hall hall) {
 
         return event.getHalls().equals(hall);
     }
