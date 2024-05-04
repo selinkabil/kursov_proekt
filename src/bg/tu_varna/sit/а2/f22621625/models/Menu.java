@@ -1,6 +1,7 @@
 package bg.tu_varna.sit.à2.f22621625.models;
 
 import bg.tu_varna.sit.à2.f22621625.contracts.MenuItem;
+import bg.tu_varna.sit.à2.f22621625.exceptions.MainException;
 import bg.tu_varna.sit.à2.f22621625.menu.*;
 
 import java.io.*;
@@ -41,7 +42,7 @@ public class Menu {
 
     }
 
-    public void handleMenuOptions(){
+    public void handleMenuOptions() throws MainException {
         displayMenu();
         while (true) {
             System.out.print("> ");

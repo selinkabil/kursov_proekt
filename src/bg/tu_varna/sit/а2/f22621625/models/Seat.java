@@ -55,9 +55,9 @@ public class Seat {
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("\nSeat\n");
+        final StringBuilder sb = new StringBuilder("\nSeat ");
         sb.append("row: ").append(row);
-        sb.append(",\n");
+        sb.append(", ");
         sb.append("number: ").append(number);
         sb.append(",\n");
         sb.append("booked: ").append(booked);

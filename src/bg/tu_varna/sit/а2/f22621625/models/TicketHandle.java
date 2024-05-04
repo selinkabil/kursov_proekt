@@ -20,10 +20,6 @@ public class TicketHandle {
         return tickets;
     }
 
-    public List<Hall> getHalls() {
-        return halls;
-    }
-
     public Hall findHallByNumber(int number){
         for(Hall h: halls){
             if(h.getNumber()==number)
@@ -39,19 +35,6 @@ public class TicketHandle {
 
     }
 
-    public void addEvent(String date, Hall hall, String name) {
-        Event newEvent = new Event(name, date, hall);
-        if (events.contains(newEvent)) {
-            System.out.println("An event with the given date already exists.");
-        } else {
-            events.add(newEvent);
-            System.out.println("Successfully added event: " + name);
-        }
-    }
-
-    public void book(int row,int seat,String date,String note,String name){
-
-    }
     public String findTicketKey(Seat seat, String date,String name) {
         Event event = findEvent(date,name);
         if (event == null) {
@@ -61,7 +44,7 @@ public class TicketHandle {
         Ticket ticket;
         for (Map.Entry<String, Ticket> entry : tickets.entrySet()) {
             ticket = entry.getValue();
-            if (ticket.getEvent().equals(event) && ticket.getSeat() == seat) {
+            if (ticket.getEvent().equals(event) && ticket.getSeat().equals(seat)) {
                 return entry.getKey();
             }
         }

@@ -22,9 +22,9 @@ public class BuyOption implements MenuItem {
         String date=scanner.next();
         String name=scanner.next();
         String ticketKey = ticketSystem.findTicketKey((new Seat(row,seat)), date,name);
-        if (ticketKey != null) {
+        if (ticketKey != null && ticketSystem.getTickets().get(ticketKey).getSeat().isBooked()) {
             ticketSystem.getTickets().get(ticketKey).setPaid(true);
-
+            System.out.println("Successfully paid for booked ticket");
         } else {
             System.out.println("No booking found for specified seat and event.");
         }

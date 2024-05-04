@@ -22,25 +22,6 @@ public class Hall {
         return number;
     }
 
-    public void setNumber(int number) {
-        this.number = number;
-    }
-
-    public int getNumberOfRows() {
-        return numberOfRows;
-    }
-
-    public void setNumberOfRows(int numberOfRows) {
-        this.numberOfRows = numberOfRows;
-    }
-
-    public int getNumberOfSeats() {
-        return numberOfSeats;
-    }
-
-    public void setNumberOfSeats(int numberOfSeats) {
-        this.numberOfSeats = numberOfSeats;
-    }
 
     @Override
     public boolean equals(Object o) {
@@ -72,7 +53,7 @@ public class Hall {
         return null;
     }
     public void initSeats(){
-        for(int i =1; i<=numberOfRows;i++){
+        for(int i =1; i<=numberOfRows;i++)                      {
             for(int j=1; j<=numberOfSeats; j++) {
                 seats.add(new Seat(i, j));
             }
@@ -81,13 +62,8 @@ public class Hall {
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("\nHall\n");
+        final StringBuilder sb = new StringBuilder("\nHall ");
         sb.append("number: ").append(number);
-        sb.append(",\n");
-        sb.append("numberOfRows: ").append(numberOfRows);
-        sb.append(",\n");
-        sb.append("numberOfSeats: ").append(numberOfSeats);
-        sb.append(",\n");
         return sb.toString();
     }
 }

@@ -1,5 +1,6 @@
 package bg.tu_varna.sit.à2.f22621625.menu;
 
+import bg.tu_varna.sit.à2.f22621625.exceptions.MainException;
 import bg.tu_varna.sit.à2.f22621625.models.Event;
 import bg.tu_varna.sit.à2.f22621625.models.Hall;
 import bg.tu_varna.sit.à2.f22621625.models.TicketHandle;
@@ -18,18 +19,15 @@ public class AddEventOption implements MenuItem {
     }
 
     @Override
-    public void performAction() {
+    public void performAction() throws MainException {
         String name = scanner.next();
         String date = scanner.next();
         int number = scanner.nextInt();
         Hall hall = ticketSystem.findHallByNumber(number);
         Event newEvent = new Event(name, date, hall);
         if (ticketSystem.getEvents().contains(newEvent)) {
-            try {
                 throw new DuplicateEventException("An event with the given date already exists.");
-            } catch (DuplicateEventException e) {
-                System.out.println(e.getMessage());
-            }
+
         } else {
             ticketSystem.getEvents().add(newEvent);
             System.out.println("Successfully added event: " + name);

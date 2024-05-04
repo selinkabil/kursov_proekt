@@ -34,9 +34,9 @@ public class Ticket {
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("\nTicket\n");
-        sb.append("event: '").append(event).append("'");
-        sb.append(",\n");
+        final StringBuilder sb = new StringBuilder("\nTicket for ");
+        sb.append("event '").append(event).append("'");
+        sb.append(", for ");
         sb.append("seat: '").append(seat).append("'");
         sb.append(",\n");
         sb.append("note: '").append(note).append("'");

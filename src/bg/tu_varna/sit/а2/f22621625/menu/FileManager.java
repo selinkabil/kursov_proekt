@@ -49,7 +49,9 @@ public class FileManager {
                 openFiles.put(fileName, content.toString());
                 currentFile = fileName;
                 System.out.println("Successfully opened: " + fileName);
+                closeCurrentFile();
                 currentFileContent=handleFileContent(content.toString());
+
             } catch (IOException e) {
                 System.out.println("File not found.");
             }
@@ -61,7 +63,6 @@ public class FileManager {
         if (currentFile != null && openFiles.containsKey(currentFile)) {
             openFiles.remove(currentFile);
             System.out.println("Successfully closed " + currentFile);
-            currentFile = null;
         }
         else
             System.out.println("No opened file to close.");
@@ -69,14 +70,14 @@ public class FileManager {
 
     public void saveFile() {
         try {
-            if (currentFileContent != null) {
+            if (currentFile != null || currentFileContent != null) {
                 FileWriter writer = new FileWriter(currentFile);
                 writer.write(currentFileContent);
                 writer.close();
                 openFiles.put(currentFile, currentFileContent);
-                System.out.println("File saved successfully.");
+                System.out.println("File saved successfully as: " + currentFile);
             } else {
-                System.out.println("No content to save.");
+                System.out.println("No content to save or no opened file.");
             }
         } catch (IOException e) {
             System.out.println("Error saving file.");

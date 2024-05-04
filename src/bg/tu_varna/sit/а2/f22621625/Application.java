@@ -1,15 +1,11 @@
 package bg.tu_varna.sit.à2.f22621625;
 
+import bg.tu_varna.sit.à2.f22621625.exceptions.MainException;
 import bg.tu_varna.sit.à2.f22621625.models.*;
 
 public class Application {
     public static void main(String[] args) {
-        Menu menu = new Menu();
 
-
-        TicketHandle ticketHandle = new TicketHandle();
-        String date1="1.12.2023";
-        String eventName1 = "Concert";
         /*Date eventDate1 = new Date(); // Today's date for simplicity
         Date eventDate2 = new Date(eventDate1.getTime() + (1000 * 60 * 60 * 24)); // Tomorrow
 
@@ -53,7 +49,17 @@ public class Application {
         // Displaying the status after unbooking a seat for the first event
         ticketHandle.freeSeats(eventDate1, eventName1);
         ticketHandle.bookings(eventDate1, eventName1);*/
+        try {
+            Menu menu = new Menu();
 
-        menu.handleMenuOptions();
+
+            TicketHandle ticketHandle = new TicketHandle();
+            String date1="1.12.2023";
+            String eventName1 = "Concert";
+            menu.handleMenuOptions();
+        }
+        catch (MainException e){
+            System.out.println(e.getMessage());
+        }
     }
 }

@@ -6,9 +6,9 @@ import bg.tu_varna.sit.à2.f22621625.models.Hall;
 import bg.tu_varna.sit.à2.f22621625.models.Ticket;
 import bg.tu_varna.sit.à2.f22621625.models.TicketHandle;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Scanner;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 public class ReportOption implements MenuItem {
     private final TicketHandle ticketSystem;
@@ -19,25 +19,82 @@ public class ReportOption implements MenuItem {
         this.scanner = scanner;
     }
 
-    // TODO: fix date comparison
 
     @Override
     public void performAction() {
-        String to = scanner.next();
         String from = scanner.next();
-        int hallnum = scanner.nextInt();
-        Hall hall=ticketSystem.findHallByNumber(hallnum);
-        Map<String, Integer> hallTicketsSold = new HashMap<>();
-        for (Map.Entry<String, Ticket> ticketEntry : ticketSystem.getTickets().entrySet()) {
-            Ticket ticket = ticketEntry.getValue();
-            Event event = ticket.getEvent();
-            if ((from == null || event.getDate().compareTo(from)==1) && (to == null || event.getDate().compareTo(to)==-1) && (hall == null || ticketSystem.isEventInHall(event, hall))) {
-                hallTicketsSold.put(event.getName(), hallTicketsSold.getOrDefault(event.getName(), 0) + 1);
-            }
+        String to = scanner.next();
+        int hallNum= scanner.nextInt();
+
+        Hall hall = ticketSystem.findHallByNumber(hallNum);
+        Date fromDate = parseDate(from);
+        Date toDate = parseDate(to);
+
+        List<Event> eventsInRange = filterEventsByDate(fromDate, toDate);
+
+        if (eventsInRange.isEmpty()) {
+            System.out.println("No events found within the specified date range.");
+            return;
         }
 
-        for (Map.Entry<String, Integer> entry : hallTicketsSold.entrySet()) {
-            System.out.println("Event: " + entry.getKey() + ", Tickets sold: " + entry.getValue());
+        // If a hall is specified, filter events and tickets by hall number
+        if (hall != null ) {
+            eventsInRange = filterEventsByHall(eventsInRange, hallNum);
+        }
+
+        // Print the report
+        System.out.println("Report from " + from + " to " + to + (hall != null ? " for hall " + hall : "") + ":");
+
+        for (Event event : eventsInRange) {
+            int soldTickets = countSoldTickets(event, fromDate, toDate);
+            System.out.println("Event: " + event.getName() + ", Sold tickets: " + soldTickets);
         }
     }
+
+    // Helper method to parse date string to Date object (implement this)
+    private Date parseDate(String dateString) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
+        try {
+            return dateFormat.parse(dateString);
+        } catch (ParseException e) {
+            System.out.println("Invalid date format. Please use dd.MM.yyyy");
+            return null;
+        }
+    }
+
+    // Helper method to filter events by date range
+    private List<Event> filterEventsByDate(Date fromDate, Date toDate) {
+        List<Event> eventsInRange = new ArrayList<>();
+        for (Event event : ticketSystem.getEvents()) {
+            Date parsedEventDate= parseDate(event.getDate());
+
+            if (parsedEventDate.after(fromDate) && parsedEventDate.before(toDate)) {
+                eventsInRange.add(event);
+            }
+        }
+        return eventsInRange;
+    }
+
+    // Helper method to filter events by hall number
+    private List<Event> filterEventsByHall(List<Event> events, int hallNumber) {
+        List<Event> filteredEvents = new ArrayList<>();
+        for (Event event : events) {
+                if (event.getHalls().getNumber() == hallNumber) {
+                    filteredEvents.add(event);
+                    break;
+                }
+        }
+        return filteredEvents;
+    }
+
+    // Helper method to count sold tickets for an event within a date range
+    private int countSoldTickets(Event event, Date fromDate, Date toDate) {
+        int soldTickets = 0;
+        for (Ticket ticket : ticketSystem.getTickets().values()) {
+           if(ticket.getEvent().equals(event)){
+               soldTickets++;
+           }
+        }
+        return soldTickets;    }
+
 }
