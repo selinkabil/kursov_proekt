@@ -24,11 +24,22 @@ public class AddEventOption implements MenuItem {
         String date = scanner.next();
         int number = scanner.nextInt();
         Hall hall = ticketSystem.findHallByNumber(number);
-        Event newEvent = new Event(name, date, hall);
-        if (ticketSystem.getEvents().contains(newEvent)) {
-                throw new DuplicateEventException("An event with the given date already exists.");
 
+        boolean eventExists = false;
+
+        // Check if an event with the same date and hall already exists
+        for (Event existingEvent : ticketSystem.getEvents()) {
+            if (existingEvent.getDate().equals(date) && existingEvent.getHalls().equals(hall)) {
+                eventExists = true;
+                break;
+            }
+        }
+
+        if (eventExists) {
+            throw new DuplicateEventException("An event with the given date and hall already exists.");
         } else {
+            // Create and add the new event
+            Event newEvent = new Event(name, date, hall);
             ticketSystem.getEvents().add(newEvent);
             System.out.println("Successfully added event: " + name);
         }

@@ -51,8 +51,6 @@ public class Application {
         ticketHandle.bookings(eventDate1, eventName1);*/
         try {
             Menu menu = new Menu();
-
-
             TicketHandle ticketHandle = new TicketHandle();
             String date1="1.12.2023";
             String eventName1 = "Concert";

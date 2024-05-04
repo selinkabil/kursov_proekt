@@ -1,10 +1,16 @@
 package bg.tu_varna.sit.à2.f22621625.models;
 
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public class TicketHandle {
-    private final Set<Event> events = new HashSet<>();
+    private final List<Event> events = new ArrayList<>();
     private final Map<String, Ticket> tickets = new HashMap<>();
     private final List<Hall> halls = new ArrayList<>();
 
@@ -12,7 +18,7 @@ public class TicketHandle {
         initHalls();
     }
 
-    public Set<Event> getEvents() {
+    public List<Event> getEvents() {
         return events;
     }
 
@@ -173,5 +179,7 @@ public class TicketHandle {
         return event.getHalls().equals(hall);
     }
 
-
+    public List<Hall> getHalls() {
+        return halls;
+    }
 }

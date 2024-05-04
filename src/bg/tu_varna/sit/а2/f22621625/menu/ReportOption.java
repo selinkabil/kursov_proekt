@@ -22,11 +22,34 @@ public class ReportOption implements MenuItem {
 
     @Override
     public void performAction() {
-        String from = scanner.next();
-        String to = scanner.next();
-        int hallNum= scanner.nextInt();
+        String input = scanner.nextLine().trim();
 
-        Hall hall = ticketSystem.findHallByNumber(hallNum);
+        // Split the input into separate parts
+        String[] parts = input.split("\\s+");
+
+        // Check if at least 'from' and 'to' dates are provided
+        if (parts.length < 2) {
+            System.out.println("Missing 'from' or 'to' dates.");
+            return;
+        }
+
+        // Extract 'from' and 'to' dates
+        String from = parts[0];
+        String to = parts[1];
+        Hall hall = null;
+        // Check if a hall number is provided
+        int hallNum = 0;
+        if (parts.length > 2) {
+            try {
+                hallNum = Integer.parseInt(parts[2]);
+                hall = ticketSystem.findHallByNumber(hallNum);
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid hall number.");
+                return;
+            }
+        }
+
+
         Date fromDate = parseDate(from);
         Date toDate = parseDate(to);
 
@@ -40,15 +63,26 @@ public class ReportOption implements MenuItem {
         // If a hall is specified, filter events and tickets by hall number
         if (hall != null ) {
             eventsInRange = filterEventsByHall(eventsInRange, hallNum);
+
+        System.out.println("Report from " + from + " to " + to + " for: " + hall + ":");
+            for (Event event : eventsInRange) {
+                int soldTickets = countSoldTickets(event, fromDate, toDate);
+                System.out.println("Event: " + event.getName() + ", Sold tickets: " + soldTickets);
+            }
+         }
+        else
+        {
+            System.out.println("Report from " + from + " to " + to + " :");
+            for(Hall hallIterator : ticketSystem.getHalls()){
+                System.out.println(hallIterator);
+                for (Event event : eventsInRange) {
+                    int soldTickets = countSoldTickets(event, fromDate, toDate);
+                    if(event.getHalls().equals(hallIterator))
+                    System.out.println("Event: " + event.getName() + ", Sold tickets: " + soldTickets);
+                }
+            }
         }
 
-        // Print the report
-        System.out.println("Report from " + from + " to " + to + (hall != null ? " for hall " + hall : "") + ":");
-
-        for (Event event : eventsInRange) {
-            int soldTickets = countSoldTickets(event, fromDate, toDate);
-            System.out.println("Event: " + event.getName() + ", Sold tickets: " + soldTickets);
-        }
     }
 
     // Helper method to parse date string to Date object (implement this)
@@ -81,7 +115,6 @@ public class ReportOption implements MenuItem {
         for (Event event : events) {
                 if (event.getHalls().getNumber() == hallNumber) {
                     filteredEvents.add(event);
-                    break;
                 }
         }
         return filteredEvents;
