@@ -39,7 +39,8 @@ public class Menu {
         System.out.println("bookings [<date>] [<name>]                  Returns a list of reserved but unpaid tickets for a performance named <name> on <date>. If <name> is omitted, returns information about all performances on the given date. If <date> is omitted, returns information for all dates.");
         System.out.println("check <code>                                Performs a ticket validity check by extracting the seat number from the given <code> code");
         System.out.println("report <from> <to> [<hall>]                 Извежда справка за закупени билети от дата <from> до дата <to> в зала <hall>");
-
+        System.out.println("mostviewedevents                            Извежда а статистика за най-гледаните представления");
+        System.out.println("leastviewedevents                           да се извежда статистика за представления с под 10% посещаемост за даден период и да се дава възможност на потребителя да свали тези представления");
     }
 
     public void handleMenuOptions() throws MainException {
@@ -71,6 +72,8 @@ public class Menu {
         actions.put("bookings", new BookingOption(ticketSystem,scanner));
         actions.put("check", new CheckOption(ticketSystem,scanner));
         actions.put("report", new ReportOption(ticketSystem,scanner));
+        actions.put("mostviewedevents", new MostViewedEventsOption(ticketSystem));
+        actions.put("leastviewedevents", new LeastViewedEventsOption(ticketSystem,scanner));
     }
     private void title(){
         System.out.println(" \n" +
