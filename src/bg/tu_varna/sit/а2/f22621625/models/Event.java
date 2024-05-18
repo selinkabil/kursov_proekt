@@ -1,15 +1,19 @@
 package bg.tu_varna.sit.à2.f22621625.models;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Objects;
 
 public class Event {
     private String name;
-    private String date;
+    private Date date;
     private Hall hall;
 
-    public Event(String name, String date, Hall halls) {
+    public Event(String name, Date date, Hall halls) {
         this.name = name;
-        this.date = date;
+        this.date=date;
         this.hall = halls;
     }
 
@@ -17,20 +21,30 @@ public class Event {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
+
         Event event = (Event) o;
-        return Objects.equals(date, event.date);
+
+        if (!Objects.equals(name, event.name)) {
+            return false;
+        } else {
+            if (!Objects.equals(date, event.date)) return false;
+            return Objects.equals(hall, event.hall);
+        }
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(date);
+        int result = name != null ? name.hashCode() : 0;
+        result = 31 * result + (date != null ? date.hashCode() : 0);
+        result = 31 * result + (hall != null ? hall.hashCode() : 0);
+        return result;
     }
 
     public String getName() {
         return name;
     }
 
-    public String getDate() {
+    public Date getDate() {
         return date;
     }
 

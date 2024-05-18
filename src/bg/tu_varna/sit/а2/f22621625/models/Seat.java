@@ -3,12 +3,11 @@ package bg.tu_varna.sit.à2.f22621625.models;
 public class Seat {
     private int row;
     private int number;
-    private boolean booked;
+    private boolean booked=false;
 
     public Seat(int row, int number) {
         this.row = row;
         this.number = number;
-        this.booked=false;
     }
 
     public int getRow() {

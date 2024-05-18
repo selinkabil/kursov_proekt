@@ -1,5 +1,7 @@
 package bg.tu_varna.sit.à2.f22621625.models;
 
+import bg.tu_varna.sit.à2.f22621625.exceptions.InvalidArgument;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -10,10 +12,10 @@ public class Hall {
     private int numberOfSeats;
     private List<Seat> seats;
 
-    public Hall(int number, int numberOfRows, int numberOfSeats) {
+    public Hall(int number, int numberOfRows, int numberOfSeats) throws InvalidArgument {
         this.number = number;
-        this.numberOfRows = numberOfRows;
-        this.numberOfSeats = numberOfSeats;
+        setNumberOfRows(numberOfRows);
+        setNumberOfSeats(numberOfSeats);
         this.seats= new ArrayList<Seat>();
         initSeats();
     }
@@ -65,5 +67,19 @@ public class Hall {
         final StringBuilder sb = new StringBuilder("\nHall ");
         sb.append("number: ").append(number);
         return sb.toString();
+    }
+
+    public void setNumberOfRows(int numberOfRows) throws InvalidArgument {
+        if(numberOfRows<0)
+            throw new InvalidArgument("Number of rows cannot be negative number");
+        else
+            this.numberOfRows = numberOfRows;
+    }
+
+    public void setNumberOfSeats(int numberOfSeats) throws InvalidArgument {
+        if(numberOfSeats<0)
+            throw new InvalidArgument("Number of rows cannot be negative number");
+        else
+        this.numberOfSeats = numberOfSeats;
     }
 }

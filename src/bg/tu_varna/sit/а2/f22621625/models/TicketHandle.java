@@ -1,20 +1,22 @@
 package bg.tu_varna.sit.à2.f22621625.models;
 
 
+import bg.tu_varna.sit.à2.f22621625.exceptions.InvalidArgument;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 public class TicketHandle {
     private final List<Event> events = new ArrayList<>();
     private final Map<String, Ticket> tickets = new HashMap<>();
     private final List<Hall> halls = new ArrayList<>();
 
-    public TicketHandle() {
+    public TicketHandle() throws InvalidArgument {
         initHalls();
     }
 
@@ -33,7 +35,7 @@ public class TicketHandle {
         }
         return null;
     }
-    private void initHalls(){
+    private void initHalls() throws InvalidArgument {
         halls.add(new Hall(1,2,5));
         halls.add(new Hall(2,5,5));
         halls.add(new Hall(3,1,5));
@@ -41,7 +43,7 @@ public class TicketHandle {
 
     }
 
-    public String findTicketKey(Seat seat, String date,String name) {
+    public String findTicketKey(Seat seat, Date date,String name) {
         Event event = findEvent(date,name);
         if (event == null) {
             System.out.println("No event found on this date.");
@@ -56,7 +58,7 @@ public class TicketHandle {
         }
         return null;
     }
-
+/*
     public void unbook(int row,int seat, String date,String name) {
         String ticketKey = findTicketKey(new Seat(row,seat), date,name);
         if (ticketKey != null) {
@@ -68,8 +70,8 @@ public class TicketHandle {
             System.out.println("No booking found for specified seat and event.");
         }
     }
-
-
+*/
+/*
     public void buy(int row, int seat, String date,String name) {
         String ticketKey = findTicketKey(new Seat(row,seat), date,name);
         if (ticketKey != null) {
@@ -79,9 +81,9 @@ public class TicketHandle {
             System.out.println("No booking found for specified seat and event.");
         }
     }
+*/
 
-
-    public Event findEvent(String date,String name){
+    public Event findEvent(Date date, String name){
         Event event = null;
         for (Event e : events) {
             if (e.getDate().equals(date)&& e.getName().equals(name)) {
@@ -91,7 +93,7 @@ public class TicketHandle {
         }
         return event;
     }
-
+/*
     public void freeSeats(String date, String eventName) {
         Event event = findEvent(date, eventName);
         if (event != null) {
@@ -105,6 +107,8 @@ public class TicketHandle {
         }
     }
 
+ */
+/*
     public void bookings(String date, String eventName) {
         Event event = findEvent(date, eventName);
         if (event != null) {
@@ -119,7 +123,8 @@ public class TicketHandle {
             System.out.println("Event not found for the given date and name.");
         }
     }
-
+*/
+    /*
     public void bookings(Date date) {
         if (date != null) {
             System.out.println("Booked tickets:");
@@ -132,7 +137,7 @@ public class TicketHandle {
         } else {
             System.out.println("Invalid date provided.");
         }
-    }
+    }*/
 
     public Seat check(String code){
         for(Map.Entry<String, Ticket> ticket : tickets.entrySet()){
@@ -142,6 +147,7 @@ public class TicketHandle {
         }
         return null;
     }
+    /*
     public void report(String from, String to) {
         System.out.println("Report for all halls from " + from + " to " + to + ":");
         generateReport(from, to, null);
@@ -156,10 +162,10 @@ public class TicketHandle {
         System.out.println("Report for hall " + hallname.getNumber() + ":");
         generateReport(null, null, hallname);
     }
-
+*/
     // TODO: FIX THE DATE COMPARISON
 
-    private void generateReport(String from, String to, Hall hallName) {
+    /*private void generateReport(String from, String to, Hall hallName) {
         Map<String, Integer> hallTicketsSold = new HashMap<>();
         for (Map.Entry<String, Ticket> ticketEntry : tickets.entrySet()) {
             Ticket ticket = ticketEntry.getValue();
@@ -172,8 +178,16 @@ public class TicketHandle {
         for (Map.Entry<String, Integer> entry : hallTicketsSold.entrySet()) {
             System.out.println("Event: " + entry.getKey() + ", Tickets sold: " + entry.getValue());
         }
+    }*/
+    public Date parseDate(String dateString) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
+        try {
+            return dateFormat.parse(dateString);
+        } catch (ParseException e) {
+            System.out.println("Invalid date format. Please use dd.MM.yyyy");
+            return null;
+        }
     }
-
     public boolean isEventInHall(Event event, Hall hall) {
 
         return event.getHalls().equals(hall);

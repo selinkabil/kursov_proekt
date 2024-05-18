@@ -1,6 +1,7 @@
 package bg.tu_varna.sit.à2.f22621625.menu;
 
 import bg.tu_varna.sit.à2.f22621625.contracts.MenuItem;
+import bg.tu_varna.sit.à2.f22621625.enums.TicketStatus;
 import bg.tu_varna.sit.à2.f22621625.exceptions.MainException;
 import bg.tu_varna.sit.à2.f22621625.models.Event;
 import bg.tu_varna.sit.à2.f22621625.models.Ticket;
@@ -21,14 +22,14 @@ public class LeastViewedEventsOption implements MenuItem {
 
     @Override
     public void performAction() throws MainException {
-        // Get the ticket counts for each event
+        // ticket counts for each event
         Map<Event, Integer> eventTicketCounts = new HashMap<>();
         for (Event event : ticketSystem.getEvents()) {
             int ticketCount = countTicketsForEvent(event);
             eventTicketCounts.put(event, ticketCount);
         }
 
-        // Calculate the total number of tickets sold
+        // Calculating the total number of tickets sold
         int totalTicketsSold = countAllTickets();
 
         // Find events with less than 10% attendance
@@ -65,7 +66,7 @@ public class LeastViewedEventsOption implements MenuItem {
         int ticketCount = 0;
         for (Map.Entry<String, Ticket> ticketEntry : ticketSystem.getTickets().entrySet()) {
             Ticket ticket = ticketEntry.getValue();
-            if (ticket.getEvent().equals(event) && ticket.isPaid()) {
+            if (ticket.getEvent().equals(event) && ticket.getTicketStatus().equals(TicketStatus.PAID)) {
                 ticketCount++;
             }
         }
@@ -75,7 +76,7 @@ public class LeastViewedEventsOption implements MenuItem {
     private int countAllTickets() {
         int totalTickets = 0;
         for (Ticket ticket : ticketSystem.getTickets().values()) {
-            if (ticket.isPaid()) {
+            if (ticket.getTicketStatus().equals(TicketStatus.PAID)) {
                 totalTickets++;
             }
         }

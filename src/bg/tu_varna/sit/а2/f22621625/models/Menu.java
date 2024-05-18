@@ -1,12 +1,14 @@
 package bg.tu_varna.sit.а2.f22621625.models;
 
 import bg.tu_varna.sit.а2.f22621625.contracts.MenuItem;
+import bg.tu_varna.sit.а2.f22621625.exceptions.InvalidArgument;
 import bg.tu_varna.sit.а2.f22621625.exceptions.MainException;
 import bg.tu_varna.sit.а2.f22621625.menu.*;
 
 import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 public class Menu {
@@ -17,7 +19,7 @@ public class Menu {
     Scanner scanner;
     Map<String, MenuItem> actions = new HashMap<>();
 
-    public Menu() {
+    public Menu() throws InvalidArgument {
         this.scanner = new Scanner(System.in);
         this.currentContent = "";
         this.currentFile = null;
@@ -38,12 +40,12 @@ public class Menu {
         System.out.println("buy <row> <seat> <date> <name>              buys a ticket for <row> and <seat> number for event with <name> on <date>");
         System.out.println("bookings [<date>] [<name>]                  Returns a list of reserved but unpaid tickets for a performance named <name> on <date>. If <name> is omitted, returns information about all performances on the given date. If <date> is omitted, returns information for all dates.");
         System.out.println("check <code>                                Performs a ticket validity check by extracting the seat number from the given <code> code");
-        System.out.println("report <from> <to> [<hall>]                 Извежда справка за закупени билети от дата <from> до дата <to> в зала <hall>");
-        System.out.println("mostviewedevents                            Извежда а статистика за най-гледаните представления");
-        System.out.println("leastviewedevents                           да се извежда статистика за представления с под 10% посещаемост за даден период и да се дава възможност на потребителя да свали тези представления");
+        System.out.println("report <from> <to> [<hall>]                 Returns a list of purchased tickets from date <from> to date <to> in hall <hall>");
+        System.out.println("mostviewedevents                            Displays statistics for the most viewed shows");
+        System.out.println("leastviewedevents                           Displays statistics for shows with less than 10% attendance for a given period and allow the user to download those shows");
     }
 
-    public void handleMenuOptions() throws MainException {
+    public void handleMenuOptions() throws MainException, NoSuchElementException {
         displayMenu();
         while (true) {
             System.out.print("> ");

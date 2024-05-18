@@ -1,6 +1,5 @@
 package bg.tu_varna.sit.à2.f22621625.menu;
 
-import bg.tu_varna.sit.à2.f22621625.exceptions.CodeNotFoundException;
 import bg.tu_varna.sit.à2.f22621625.exceptions.MainException;
 import bg.tu_varna.sit.à2.f22621625.models.Ticket;
 import bg.tu_varna.sit.à2.f22621625.models.TicketHandle;
@@ -20,16 +19,18 @@ public class CheckOption implements MenuItem {
 
     @Override
     public void performAction() throws MainException {
-        boolean found=false;
-        String code = scanner.next();
-        for(Map.Entry<String, Ticket> ticket : ticketSystem.getTickets().entrySet()){
-            if(ticket.getKey().equals(code)){
-                System.out.println(ticket.getValue().getSeat());
-                found=true;
+            boolean found=false;
+            String[] input = scanner.nextLine().trim().split("\\s+");
+            String code = input[0];
+            for(Map.Entry<String, Ticket> ticket : ticketSystem.getTickets().entrySet()){
+                if(ticket.getKey().equals(code)){
+                    System.out.println(ticket.getValue().getSeat());
+                    found=true;
+                }
+            }
+            if(!found){
+                System.out.println("No ticket found with the given code");
             }
         }
-        if(!found){
-                throw new CodeNotFoundException("No ticket found with the given code");
-        }
+
     }
-}

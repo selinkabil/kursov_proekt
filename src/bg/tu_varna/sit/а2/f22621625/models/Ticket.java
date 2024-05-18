@@ -1,18 +1,24 @@
 package bg.tu_varna.sit.à2.f22621625.models;
 
+import bg.tu_varna.sit.à2.f22621625.enums.TicketStatus;
+
 public class Ticket {
     private Event event;
     private final Seat seat;
     private final String note;
-    private boolean paid;
+    private TicketStatus ticketStatus;
+
 
     public Ticket(Event event, Seat seat, String note) {
         this.event = event;
         this.seat = seat;
         this.note = note;
-        this.paid=false;
+        this.ticketStatus=TicketStatus.AVAILABLE;
     }
     public Event getEvent() {
+        if(event==null){
+            throw new NullPointerException();
+        }
         return event;
     }
 
@@ -24,24 +30,25 @@ public class Ticket {
         return seat;
     }
 
-    public boolean isPaid() {
-        return paid;
+    public TicketStatus getTicketStatus() {
+        return ticketStatus;
     }
 
-    public void setPaid(boolean booked) {
-        this.paid = booked;
+    public void setTicketStatus(TicketStatus ticketStatus) {
+        this.ticketStatus = ticketStatus;
     }
 
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("\nTicket for ");
-        sb.append("event '").append(event).append("'");
+        sb.append("event ").append(event.getName());
         sb.append(", for ");
-        sb.append("seat: '").append(seat).append("'");
-        sb.append(",\n");
-        sb.append("note: '").append(note).append("'");
-        sb.append(",\n");
-        sb.append("paid: ").append(paid);
+        sb.append("seat ").append(seat.getRow()+" "+seat.getNumber());
+        sb.append(",");
+        sb.append(" with note: ").append(note).append("");
+        sb.append(",");
+        if(ticketStatus.equals(TicketStatus.PAID))
+            sb.append("paid");
         return sb.toString();
     }
 }

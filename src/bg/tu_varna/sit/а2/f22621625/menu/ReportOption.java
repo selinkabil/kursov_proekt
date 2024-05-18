@@ -22,33 +22,24 @@ public class ReportOption implements MenuItem {
 
     @Override
     public void performAction() {
+        try{
         String input = scanner.nextLine().trim();
-
-        // Split the input into separate parts
         String[] parts = input.split("\\s+");
 
-        // Check if at least 'from' and 'to' dates are provided
         if (parts.length < 2) {
             System.out.println("Missing 'from' or 'to' dates.");
             return;
         }
 
-        // Extract 'from' and 'to' dates
         String from = parts[0];
         String to = parts[1];
         Hall hall = null;
-        // Check if a hall number is provided
         int hallNum = 0;
         if (parts.length > 2) {
-            try {
                 hallNum = Integer.parseInt(parts[2]);
                 hall = ticketSystem.findHallByNumber(hallNum);
-            } catch (NumberFormatException e) {
-                System.out.println("Invalid hall number.");
-                return;
-            }
-        }
 
+        }
 
         Date fromDate = parseDate(from);
         Date toDate = parseDate(to);
@@ -60,28 +51,28 @@ public class ReportOption implements MenuItem {
             return;
         }
 
-        // If a hall is specified, filter events and tickets by hall number
-        if (hall != null ) {
+        if (hall != null) {
             eventsInRange = filterEventsByHall(eventsInRange, hallNum);
 
-        System.out.println("Report from " + from + " to " + to + " for: " + hall + ":");
+            System.out.println("Report from " + from + " to " + to + " for: " + hall + ":");
             for (Event event : eventsInRange) {
                 int soldTickets = countSoldTickets(event, fromDate, toDate);
                 System.out.println("Event: " + event.getName() + ", Sold tickets: " + soldTickets);
             }
-         }
-        else
-        {
+        } else {
             System.out.println("Report from " + from + " to " + to + " :");
-            for(Hall hallIterator : ticketSystem.getHalls()){
+            for (Hall hallIterator : ticketSystem.getHalls()) {
                 System.out.println(hallIterator);
                 for (Event event : eventsInRange) {
                     int soldTickets = countSoldTickets(event, fromDate, toDate);
-                    if(event.getHalls().equals(hallIterator))
-                    System.out.println("Event: " + event.getName() + ", Sold tickets: " + soldTickets);
+                    if (event.getHalls().equals(hallIterator))
+                        System.out.println("Event: " + event.getName() + ", Sold tickets: " + soldTickets);
                 }
             }
         }
+        }  catch (NumberFormatException | InputMismatchException | ArrayIndexOutOfBoundsException e){
+        System.out.println("Invalid input format.");
+    }
 
     }
 
@@ -100,9 +91,8 @@ public class ReportOption implements MenuItem {
     private List<Event> filterEventsByDate(Date fromDate, Date toDate) {
         List<Event> eventsInRange = new ArrayList<>();
         for (Event event : ticketSystem.getEvents()) {
-            Date parsedEventDate= parseDate(event.getDate());
 
-            if (parsedEventDate.after(fromDate) && parsedEventDate.before(toDate)) {
+            if (event.getDate().after(fromDate) && event.getDate().before(toDate)) {
                 eventsInRange.add(event);
             }
         }
