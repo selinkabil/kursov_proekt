@@ -1,41 +1,35 @@
 package bg.tu_varna.sit.a2.f22621625.menu;
 
-import bg.tu_varna.sit.a2.f22621625.contracts.MenuItem;
 import bg.tu_varna.sit.a2.f22621625.enums.TicketStatus;
+import bg.tu_varna.sit.a2.f22621625.exceptions.InvalidArgument;
 import bg.tu_varna.sit.a2.f22621625.models.Event;
 import bg.tu_varna.sit.a2.f22621625.models.Ticket;
-import bg.tu_varna.sit.a2.f22621625.models.TicketHandle;
 import bg.tu_varna.sit.a2.f22621625.models.Hall;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
  * Represents an option to generate a report of events within a specified date range.
  */
-public class ReportOption implements MenuItem {
-    private final TicketHandle ticketSystem;
-    private final Scanner scanner;
+public class ReportOption extends MainMenuOption {
 
     /**
-     * Constructs a ReportOption object with the given TicketHandle and Scanner.
+     * Constructs a new ReportOption.
      *
-     * @param ticketSystem the TicketHandle object to handle tickets and events
-     * @param scanner      the Scanner object to read user input
+     * @throws InvalidArgument if an invalid argument is encountered during initialization
      */
-    public ReportOption(TicketHandle ticketSystem, Scanner scanner) {
-        this.ticketSystem = ticketSystem;
-        this.scanner = scanner;
+    public ReportOption() throws InvalidArgument {
     }
 
     /**
      * Performs the action of generating a report of events within a specified date range.
+     *
+     * @param arguments the arguments passed to the menu option
      */
     @Override
-    public void performAction() {
+    public void performAction(String arguments) {
         try {
-            String input = scanner.nextLine().trim();
+            String input = arguments.trim();
             String[] parts = input.split("\\s+");
 
             if (parts.length < 2) {
@@ -49,7 +43,7 @@ public class ReportOption implements MenuItem {
             int hallNum = 0;
             if (parts.length > 2) {
                 hallNum = Integer.parseInt(parts[2]);
-                hall = ticketSystem.findHallByNumber(hallNum);
+                hall = findHallByNumber(hallNum);
             }
 
             Date fromDate = parseDate(from);
@@ -65,18 +59,18 @@ public class ReportOption implements MenuItem {
             if (hall != null) {
                 eventsInRange = filterEventsByHall(eventsInRange, hallNum);
 
-                System.out.println("Report from " + from + " to " + to + " for: " + hall + ":");
+                System.out.println("Report from " + from + " to " + to + " for " + hall);
                 for (Event event : eventsInRange) {
                     int soldTickets = countSoldTickets(event, fromDate, toDate);
-                    System.out.println("Event: " + event.getName() + ", Sold tickets: " + soldTickets);
+                    System.out.println("\nEvent: " + event.getName() + ", Sold tickets: " + soldTickets);
                 }
             } else {
                 System.out.println("Report from " + from + " to " + to + " :");
-                for (Hall hallIterator : ticketSystem.getHalls()) {
-                    System.out.println(hallIterator);
+                for (Hall hallIterator : getHalls()) {
+                    System.out.println("\n" + hallIterator);
                     for (Event event : eventsInRange) {
                         int soldTickets = countSoldTickets(event, fromDate, toDate);
-                        if (event.getHalls().equals(hallIterator))
+                        if (event.getHall().equals(hallIterator))
                             System.out.println("Event: " + event.getName() + ", Sold tickets: " + soldTickets);
                     }
                 }
@@ -86,21 +80,10 @@ public class ReportOption implements MenuItem {
         }
     }
 
-    // Helper method to parse date string to Date object
-    private Date parseDate(String dateString) {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
-        try {
-            return dateFormat.parse(dateString);
-        } catch (ParseException e) {
-            System.out.println("Invalid date format. Please use dd.MM.yyyy");
-            return null;
-        }
-    }
-
     // Helper method to filter events by date range
     private List<Event> filterEventsByDate(Date fromDate, Date toDate) {
         List<Event> eventsInRange = new ArrayList<>();
-        for (Event event : ticketSystem.getEvents()) {
+        for (Event event : getEventManager().getEvents()) {
             if (event.getDate().after(fromDate) && event.getDate().before(toDate)) {
                 eventsInRange.add(event);
             }
@@ -112,7 +95,7 @@ public class ReportOption implements MenuItem {
     private List<Event> filterEventsByHall(List<Event> events, int hallNumber) {
         List<Event> filteredEvents = new ArrayList<>();
         for (Event event : events) {
-            if (event.getHalls().getNumber() == hallNumber) {
+            if (event.getHall().getNumber() == hallNumber) {
                 filteredEvents.add(event);
             }
         }
@@ -122,7 +105,7 @@ public class ReportOption implements MenuItem {
     // Helper method to count sold tickets for an event within a date range
     private int countSoldTickets(Event event, Date fromDate, Date toDate) {
         int soldTickets = 0;
-        for (Ticket ticket : ticketSystem.getTickets().values()) {
+        for (Ticket ticket : getTicketManager().getTickets()) {
             if (ticket.getEvent().equals(event) && ticket.getTicketStatus().equals(TicketStatus.PAID)) {
                 soldTickets++;
             }

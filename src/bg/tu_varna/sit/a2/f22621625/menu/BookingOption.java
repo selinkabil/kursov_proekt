@@ -1,10 +1,9 @@
 package bg.tu_varna.sit.a2.f22621625.menu;
 
 import bg.tu_varna.sit.a2.f22621625.enums.TicketStatus;
+import bg.tu_varna.sit.a2.f22621625.exceptions.InvalidArgument;
 import bg.tu_varna.sit.a2.f22621625.models.Event;
 import bg.tu_varna.sit.a2.f22621625.models.Ticket;
-import bg.tu_varna.sit.a2.f22621625.models.TicketHandle;
-import bg.tu_varna.sit.a2.f22621625.contracts.MenuItem;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -13,29 +12,26 @@ import java.util.*;
 /**
  * This class represents the menu option to view bookings.
  */
-public class BookingOption implements MenuItem {
-    private final TicketHandle ticketSystem;
-    private final Scanner scanner;
+public class BookingOption extends MainMenuOption {
 
     /**
-     * Constructs a BookingOption with the specified TicketHandle and Scanner.
+     * Constructs a new BookingOption.
      *
-     * @param ticketSystem the TicketHandle system for managing events and tickets.
-     * @param scanner      the Scanner to read user input.
+     * @throws InvalidArgument if an invalid argument is provided during construction.
      */
-    public BookingOption(TicketHandle ticketSystem, Scanner scanner) {
-        this.ticketSystem = ticketSystem;
-        this.scanner = scanner;
+    public BookingOption() throws InvalidArgument {
     }
 
     /**
      * Performs the action of viewing bookings.
      * This method reads input from the user and displays booked tickets based on the input.
+     *
+     * @param arguments the input arguments for viewing bookings.
      */
     @Override
-    public void performAction() {
+    public void performAction(String arguments) {
         try {
-            String input = scanner.nextLine().trim();
+            String input = arguments.trim();
             String[] parts = input.split("\\s+");
             if (parts.length < 2) {
                 bookingsWithOneParam(parts[0]);
@@ -55,7 +51,7 @@ public class BookingOption implements MenuItem {
      */
     private List<Event> findEventsByName(String name) {
         List<Event> eventsWithGivenName = new ArrayList<>();
-        for (Event event : ticketSystem.getEvents()) {
+        for (Event event : getEventManager().getEvents()) {
             if (event.getName().equals(name))
                 eventsWithGivenName.add(event);
         }
@@ -68,12 +64,12 @@ public class BookingOption implements MenuItem {
      * @param event the event for which to print booked tickets.
      */
     private void printBookedTickets(Event event) {
-        for (Map.Entry<String, Ticket> ticketEntry : ticketSystem.getTickets().entrySet()) {
-            Ticket ticket = ticketEntry.getValue();
+        for (Ticket ticket : getTicketManager().getTickets()) {
             if (ticket.getEvent().equals(event) && ticket.getTicketStatus().equals(TicketStatus.BOOKED)) {
                 System.out.println(ticket);
             }
         }
+
     }
 
     /**
@@ -99,8 +95,8 @@ public class BookingOption implements MenuItem {
      * @param input2 the name of the event.
      */
     private void bookingsWithTwoParam(String input1, String input2) {
-        Date date = ticketSystem.parseDate(input1);
-        Event event = ticketSystem.findEvent(date, input2);
+        Date date = parseDate(input1);
+        Event event = getEventManager().findEvent(date, input2);
         if (event != null) {
             System.out.println("Booked tickets:");
             printBookedTickets(event);
@@ -116,9 +112,9 @@ public class BookingOption implements MenuItem {
      */
     private void bookingsWithOneParam(String input) {
         if (isDate(input)) {
-            Date date = ticketSystem.parseDate(input);
+            Date date = parseDate(input);
             System.out.println("Booked tickets for all events on " + date + ":");
-            for (Event event : ticketSystem.getEvents()) {
+            for (Event event : getEventManager().getEvents()) {
                 if (event.getDate().equals(date)) {
                     printBookedTickets(event);
                 }

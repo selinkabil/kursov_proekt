@@ -1,10 +1,9 @@
 package bg.tu_varna.sit.a2.f22621625.menu;
 
 import bg.tu_varna.sit.a2.f22621625.enums.TicketStatus;
+import bg.tu_varna.sit.a2.f22621625.exceptions.InvalidArgument;
 import bg.tu_varna.sit.a2.f22621625.models.Event;
 import bg.tu_varna.sit.a2.f22621625.models.Ticket;
-import bg.tu_varna.sit.a2.f22621625.models.TicketHandle;
-import bg.tu_varna.sit.a2.f22621625.contracts.MenuItem;
 import bg.tu_varna.sit.a2.f22621625.exceptions.MainException;
 
 import java.util.*;
@@ -12,31 +11,27 @@ import java.util.*;
 /**
  * Represents an option to display and potentially remove the least viewed events.
  */
-public class LeastViewedEventsOption implements MenuItem {
-    private TicketHandle ticketSystem;
-    private final Scanner scanner;
+public class LeastViewedEventsOption extends MainMenuOption {
 
     /**
-     * Constructs a LeastViewedEventsOption object with the given TicketHandle and Scanner.
+     * Constructs a new LeastViewedEventsOption.
      *
-     * @param ticketSystem the TicketHandle object to handle tickets and events
-     * @param scanner      the Scanner object for user input
+     * @throws InvalidArgument if an invalid argument is encountered.
      */
-    public LeastViewedEventsOption(TicketHandle ticketSystem, Scanner scanner) {
-        this.ticketSystem = ticketSystem;
-        this.scanner = scanner;
+    public LeastViewedEventsOption() throws InvalidArgument {
     }
 
     /**
      * Displays the least viewed events and allows the user to remove them.
      *
+     * @param arguments the input arguments (not used in this method)
      * @throws MainException if an error occurs during the operation
      */
     @Override
-    public void performAction() throws MainException {
+    public void performAction(String arguments) throws MainException {
         // ticket counts for each event
         Map<Event, Integer> eventTicketCounts = new HashMap<>();
-        for (Event event : ticketSystem.getEvents()) {
+        for (Event event : getEventManager().getEvents()) {
             int ticketCount = countTicketsForEvent(event);
             eventTicketCounts.put(event, ticketCount);
         }
@@ -66,9 +61,10 @@ public class LeastViewedEventsOption implements MenuItem {
                 rank++;
             }
             System.out.println("Would you like to remove these events? y/n");
+            Scanner scanner = new Scanner(System.in);
             String answer = scanner.next();
             if (answer.equals("y")) {
-                ticketSystem.getEvents().removeAll(leastViewedEvents);
+                getEventManager().getEvents().removeAll(leastViewedEvents);
                 System.out.println("Successfully removed least viewed events.");
             }
         }
@@ -82,9 +78,8 @@ public class LeastViewedEventsOption implements MenuItem {
      */
     private int countTicketsForEvent(Event event) {
         int ticketCount = 0;
-        for (Map.Entry<String, Ticket> ticketEntry : ticketSystem.getTickets().entrySet()) {
-            Ticket ticket = ticketEntry.getValue();
-            if (ticket.getEvent().equals(event) && ticket.getTicketStatus().equals(TicketStatus.PAID)) {
+        for (Ticket t : getTicketManager().getTickets()) {
+            if (t.getEvent().equals(event) && t.getTicketStatus().equals(TicketStatus.PAID)) {
                 ticketCount++;
             }
         }
@@ -98,7 +93,7 @@ public class LeastViewedEventsOption implements MenuItem {
      */
     private int countAllTickets() {
         int totalTickets = 0;
-        for (Ticket ticket : ticketSystem.getTickets().values()) {
+        for (Ticket ticket : getTicketManager().getTickets()) {
             if (ticket.getTicketStatus().equals(TicketStatus.PAID)) {
                 totalTickets++;
             }

@@ -1,33 +1,29 @@
 package bg.tu_varna.sit.a2.f22621625.menu;
 
-import bg.tu_varna.sit.a2.f22621625.contracts.MenuItem;
-
-import java.util.Scanner;
+import bg.tu_varna.sit.a2.f22621625.exceptions.InvalidArgument;
 
 /**
  * Represents a menu option to exit the program.
  */
-public class ExitOption implements MenuItem {
-
-    private final Scanner scanner;
+public class ExitOption extends MainMenuOption {
 
     /**
-     * Constructs an ExitOption with the specified Scanner.
+     * Constructs a new ExitOption.
      *
-     * @param scanner the Scanner used for user input.
+     * @throws InvalidArgument if an invalid argument is encountered.
      */
-    public ExitOption(Scanner scanner) {
-        this.scanner = scanner;
+    public ExitOption() throws InvalidArgument {
     }
 
     /**
      * Performs the action of exiting the program.
      * Closes the Scanner and terminates the program with exit code 0.
+     *
+     * @param arguments any arguments passed to the option (not used)
      */
     @Override
-    public void performAction() {
+    public void performAction(String arguments) {
         System.out.println("\nExiting the program...");
-        scanner.close();
         System.exit(0);
     }
 }

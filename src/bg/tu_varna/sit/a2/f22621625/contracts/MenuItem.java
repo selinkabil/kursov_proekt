@@ -9,7 +9,8 @@ public interface MenuItem {
     /**
      * Executes the action associated with this menu item.
      *
+     * @param arguments the arguments needed to perform the action
      * @throws MainException if an error occurs during the action.
      */
-    void performAction() throws MainException;
+    void performAction(String arguments) throws MainException;
 }

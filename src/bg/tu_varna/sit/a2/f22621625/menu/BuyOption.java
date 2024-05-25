@@ -1,48 +1,44 @@
 package bg.tu_varna.sit.a2.f22621625.menu;
 
 import bg.tu_varna.sit.a2.f22621625.enums.TicketStatus;
-import bg.tu_varna.sit.a2.f22621625.models.TicketHandle;
-import bg.tu_varna.sit.a2.f22621625.models.Seat;
-import bg.tu_varna.sit.a2.f22621625.contracts.MenuItem;
+import bg.tu_varna.sit.a2.f22621625.exceptions.InvalidArgument;
+import bg.tu_varna.sit.a2.f22621625.models.Event;
+import bg.tu_varna.sit.a2.f22621625.models.Ticket;
 
 import java.util.Date;
 import java.util.InputMismatchException;
-import java.util.Scanner;
 
 /**
  * This class represents the menu option to buy a ticket.
  */
-public class BuyOption implements MenuItem {
-    private final TicketHandle ticketSystem;
-    private final Scanner scanner;
+public class BuyOption extends MainMenuOption {
 
     /**
-     * Constructs a BuyOption with the specified TicketHandle and Scanner.
+     * Constructs a new BuyOption.
      *
-     * @param ticketSystem the TicketHandle system for managing events and tickets.
-     * @param scanner      the Scanner to read user input.
+     * @throws InvalidArgument if an invalid argument is provided during construction.
      */
-    public BuyOption(TicketHandle ticketSystem, Scanner scanner) {
-        this.ticketSystem = ticketSystem;
-        this.scanner = scanner;
+    public BuyOption() throws InvalidArgument {
     }
 
     /**
      * Performs the action of buying a ticket.
      * This method reads input from the user and marks the ticket as paid if found in the system.
+     *
+     * @param arguments the input arguments for buying a ticket.
      */
     @Override
-    public void performAction() {
+    public void performAction(String arguments) {
         try {
-            String[] input = scanner.nextLine().trim().split("\\s+");
+            String[] input = arguments.trim().split("\\s+");
             int row = Integer.parseInt(input[0]);
             int seat = Integer.parseInt(input[1]);
-            Date date = ticketSystem.parseDate(input[2]);
+            Date date = parseDate(input[2]);
             String name = input[3];
-            String ticketKey = ticketSystem.findTicketKey((new Seat(row, seat)), date, name);
-            if (ticketKey != null && ticketSystem.getTickets().get(ticketKey).getSeat().isBooked()) {
-                ticketSystem.getTickets().get(ticketKey).setTicketStatus(TicketStatus.PAID);
-                ticketSystem.getTickets().get(ticketKey).getSeat().setBooked(false);
+            Event event = getEventManager().findEvent(date, name);
+            Ticket ticket = getTicketManager().findTicket(event, row, seat);
+            if (ticket != null && ticket.getSeat().isBooked()) {
+                ticket.setTicketStatus(TicketStatus.PAID);
                 System.out.println("Successfully paid for booked ticket");
             } else {
                 System.out.println("No booking found for specified seat and event.");

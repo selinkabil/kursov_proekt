@@ -1,28 +1,18 @@
-package bg.tu_varna.sit.a2.f22621625.menu;
+package bg.tu_varna.sit.a2.f22621625.FileHandling;
 
 import java.io.*;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Scanner;
 
 /**
  * Manages file operations such as opening, closing, saving, and saving as files.
  */
 public class FileManager {
-
-    private final Map<String, String> openFiles;
     private String currentFile;
     private String currentFileContent;
 
-    /**
-     * Constructs a new FileManager object.
-     * Initializes an empty map for storing open files.
-     */
-    public FileManager() {
-        this.openFiles = new HashMap<>();
-        this.currentFile = null;
-    }
 
+    public FileManager() {
+    }
     /**
      * Handles the content of the file.
      * Prompts the user to enter new content and updates the current file content accordingly.
@@ -31,9 +21,6 @@ public class FileManager {
      * @return the updated content of the file
      */
     public String handleFileContent(String content) {
-        System.out.println("Content of file:");
-        System.out.println(content);
-
         StringBuilder updatedContent = new StringBuilder(content);
         Scanner scanner = new Scanner(System.in);
         System.out.println("Enter new content below (end with 'end'): ");
@@ -53,41 +40,21 @@ public class FileManager {
      * @param fileName the name of the file to open
      */
     public void openFile(String fileName) {
-        try {
-            File file = new File(fileName);
-            if (!file.exists()) {
-                file.createNewFile();
-                openFiles.put(fileName, "");
-                currentFile = fileName;
-            }
-
-            StringBuilder content = new StringBuilder();
-            try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
-                String line;
-                while ((line = reader.readLine()) != null) {
-                    content.append(line).append("\n");
-                }
-            }
-            openFiles.put(fileName, content.toString());
-            currentFile = fileName;
-            System.out.println("Successfully opened: " + fileName);
+            readFromFile(fileName);
             closeCurrentFile();
-            currentFileContent = handleFileContent(content.toString());
 
-        } catch (IOException e) {
-            System.out.println("File not found.");
-        }
     }
 
     /**
      * Closes the currently open file.
      */
     public void closeCurrentFile() {
-        if (currentFile != null && openFiles.containsKey(currentFile)) {
-            openFiles.remove(currentFile);
+        if (currentFile != null) {
+            currentFileContent="";
             System.out.println("Successfully closed " + currentFile);
-        } else
+        } else {
             System.out.println("No opened file to close.");
+        }
     }
 
     /**
@@ -95,11 +62,12 @@ public class FileManager {
      */
     public void saveFile() {
         try {
-            if (currentFile != null || currentFileContent != null) {
-                FileWriter writer = new FileWriter(currentFile);
-                writer.write(currentFileContent);
-                writer.close();
-                openFiles.put(currentFile, currentFileContent);
+            readFromFile(currentFile);
+            handleFileContent(currentFileContent);
+            if (currentFile != null && currentFileContent != null) {
+                try (FileWriter writer = new FileWriter(currentFile)) {
+                    writer.write(currentFileContent);
+                }
                 System.out.println("File saved successfully as: " + currentFile);
             } else {
                 System.out.println("No content to save or no opened file.");
@@ -116,21 +84,47 @@ public class FileManager {
      */
     public void saveAsFile(String newFileName) {
         try {
-            if (currentFile != null) {
+            readFromFile(currentFile);
+            handleFileContent(currentFileContent);
+            if (currentFile != null && currentFileContent != null) {
                 File file = new File(newFileName);
                 if (!file.exists()) {
                     file.createNewFile();
                 }
-                FileWriter writer = new FileWriter(newFileName);
-                writer.write(currentFileContent);
-                writer.close();
-                openFiles.put(newFileName, currentFileContent);
+                try (FileWriter writer = new FileWriter(newFileName)) {
+                    writer.write(currentFileContent);
+                }
                 System.out.println("File saved successfully as: " + newFileName);
             } else {
                 System.out.println("No opened file to save.");
             }
         } catch (IOException e) {
             System.out.println("Error saving file as: " + e.getMessage());
+        }
+    }
+
+    private void readFromFile(String fileName){
+        try {
+            File file = new File(fileName);
+            if (!file.exists()) {
+                file.createNewFile();
+                currentFile = fileName;
+            }
+            StringBuilder content = new StringBuilder("");
+            BufferedReader reader = new BufferedReader(new FileReader(file));
+            String line;
+            while ((line = reader.readLine()) != null) {
+                content.append(line).append("\n");
+            }
+
+            currentFile = fileName;
+            System.out.println("Successfully opened: " + fileName);
+            currentFileContent = content.toString();
+            System.out.println("Content of file:");
+            System.out.println(content);
+        }
+        catch (IOException e){
+            e.printStackTrace();
         }
     }
 }

@@ -1,22 +1,25 @@
 package bg.tu_varna.sit.a2.f22621625.models;
 
 /**
- * Represents a seat in a hall.
+ * Represents a seat in a hall with a row number and seat number.
+ * A seat can be booked or unbooked.
  */
 public class Seat {
     private int row;
     private int number;
-    private boolean booked=false;
+    private boolean booked;
 
     /**
-     * Constructs a Seat object with the specified row and seat number.
+     * Constructs a new Seat with the specified row and number.
+     * Initially, the seat is not booked.
      *
      * @param row    the row number of the seat
-     * @param number the seat number
+     * @param number the seat number within the row
      */
     public Seat(int row, int number) {
         this.row = row;
         this.number = number;
+        this.booked = false;
     }
 
     /**
@@ -28,17 +31,14 @@ public class Seat {
         return row;
     }
 
-
-
     /**
-     * Gets the seat number.
+     * Gets the seat number within the row.
      *
      * @return the seat number
      */
     public int getNumber() {
         return number;
     }
-
 
     /**
      * Checks if the seat is booked.
@@ -50,19 +50,21 @@ public class Seat {
     }
 
     /**
-     * Sets the booked status of the seat.
+     * Sets the booking status of the seat.
      *
-     * @param booked true if the seat is booked, false otherwise
+     * @param booked true to book the seat, false to unbook it
      */
     public void setBooked(boolean booked) {
         this.booked = booked;
     }
 
+
     /**
-     * Compares this seat to the specified object. The result is true if and only if the argument is not null and is a Seat object that represents the same row and seat number.
+     * Compares this seat to the specified object.
+     * The result is true if and only if the argument is not null and is a Seat object that represents the same row and seat number.
      *
-     * @param o the object to compare
-     * @return true if the seats are equal, false otherwise
+     * @param o the object to compare this Seat against
+     * @return true if the given object represents a Seat equivalent to this seat, false otherwise
      */
     @Override
     public boolean equals(Object o) {
@@ -76,9 +78,10 @@ public class Seat {
     }
 
     /**
-     * Returns a hash code value for the seat.
+     * Returns a hash code for this seat.
+     * The hash code is computed based on the row and seat number.
      *
-     * @return the hash code
+     * @return a hash code value for this seat
      */
     @Override
     public int hashCode() {
@@ -88,18 +91,17 @@ public class Seat {
     }
 
     /**
-     * Returns a string representation of the seat.
+     * Returns a string representation of this seat.
+     * The string representation consists of the row, seat number, and booking status.
      *
-     * @return a string representation
+     * @return a string representation of this seat
      */
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("\nSeat ");
-        sb.append("row: ").append(row);
-        sb.append(", ");
-        sb.append("number: ").append(number);
-        sb.append(",\n");
-        sb.append("booked: ").append(booked);
-        return sb.toString();
+        return "Seat{" +
+                "row=" + row +
+                ", number=" + number +
+                ", booked=" + booked +
+                '}';
     }
 }

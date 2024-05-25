@@ -1,11 +1,10 @@
 package bg.tu_varna.sit.a2.f22621625.menu;
 
 import bg.tu_varna.sit.a2.f22621625.enums.TicketStatus;
+import bg.tu_varna.sit.a2.f22621625.exceptions.InvalidArgument;
 import bg.tu_varna.sit.a2.f22621625.exceptions.MainException;
 import bg.tu_varna.sit.a2.f22621625.models.Event;
 import bg.tu_varna.sit.a2.f22621625.models.Ticket;
-import bg.tu_varna.sit.a2.f22621625.models.TicketHandle;
-import bg.tu_varna.sit.a2.f22621625.contracts.MenuItem;
 import bg.tu_varna.sit.a2.f22621625.models.EventTicketCount;
 
 import java.util.*;
@@ -13,34 +12,33 @@ import java.util.*;
 /**
  * Represents an option to display the most viewed events based on the number of tickets sold.
  */
-public class MostViewedEventsOption implements MenuItem {
-    private TicketHandle ticketSystem;
+public class MostViewedEventsOption extends MainMenuOption  {
 
     /**
-     * Constructs a MostViewedEventsOption object with the given TicketHandle.
+     * Constructs a new MostViewedEventsOption.
      *
-     * @param ticketSystem the TicketHandle object to handle tickets and events
+     * @throws InvalidArgument if an invalid argument is encountered during initialization
      */
-    public MostViewedEventsOption(TicketHandle ticketSystem) {
-        this.ticketSystem = ticketSystem;
+    public MostViewedEventsOption() throws InvalidArgument {
     }
 
     /**
      * Displays the most viewed events based on the number of tickets sold.
      *
+     * @param arguments the arguments passed to the menu option (not used)
      * @throws MainException if an error occurs during the operation
      */
     @Override
-    public void performAction() throws MainException {
+    public void performAction(String arguments) throws MainException {
         // Map to store ticket counts for each event
         Map<Event, Integer> eventTicketCounts = new HashMap<>();
-        for (Event event : ticketSystem.getEvents()) {
+        for (Event event : getEventManager().getEvents()) {
             int ticketCount = countTicketsForEvent(event);
             eventTicketCounts.put(event, ticketCount);
         }
 
         // Sort events based on ticket counts
-        List<Event> sortedEvents = new ArrayList<>(ticketSystem.getEvents());
+        List<Event> sortedEvents = new ArrayList<>(getEventManager().getEvents());
         Collections.sort(sortedEvents, new EventTicketCount(eventTicketCounts));
 
         // Print the most viewed events
@@ -60,8 +58,7 @@ public class MostViewedEventsOption implements MenuItem {
      */
     private int countTicketsForEvent(Event event) {
         int ticketCount = 0;
-        for (Map.Entry<String, Ticket> ticketEntry : ticketSystem.getTickets().entrySet()) {
-            Ticket ticket = ticketEntry.getValue();
+        for (Ticket ticket:getTicketManager().getTickets()) {
             if (ticket.getEvent().equals(event) && ticket.getTicketStatus().equals(TicketStatus.PAID)) {
                 ticketCount++;
             }

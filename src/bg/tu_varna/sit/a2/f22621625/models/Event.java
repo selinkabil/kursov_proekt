@@ -1,10 +1,12 @@
 package bg.tu_varna.sit.a2.f22621625.models;
 
+import bg.tu_varna.sit.a2.f22621625.exceptions.InvalidArgument;
+
 import java.util.Date;
 import java.util.Objects;
 
 /**
- * Represents an event, which includes a name, date, and associated hall.
+ * Represents an event.
  */
 public class Event {
     private String name;
@@ -12,48 +14,17 @@ public class Event {
     private Hall hall;
 
     /**
-     * Constructs a new event with the specified name, date, and hall.
+     * Constructs a new Event with the specified name, date, and hall.
      *
      * @param name the name of the event
      * @param date the date of the event
      * @param hall the hall associated with the event
+     * @throws InvalidArgument if the name is null or empty, or if the date or hall is null
      */
-    public Event(String name, Date date, Hall hall) {
-        this.name = name;
-        this.date = date;
-        this.hall = hall;
-    }
-
-    /**
-     * Checks if this event is equal to another object. Two events are considered equal
-     * if they have the same name, date, and hall.
-     *
-     * @param o the object to compare with
-     * @return true if the objects are equal, false otherwise
-     */
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        Event event = (Event) o;
-
-        if (!Objects.equals(name, event.name)) return false;
-        if (!Objects.equals(date, event.date)) return false;
-        return Objects.equals(hall, event.hall);
-    }
-
-    /**
-     * Generates a hash code value for this event.
-     *
-     * @return the hash code value for this event
-     */
-    @Override
-    public int hashCode() {
-        int result = name != null ? name.hashCode() : 0;
-        result = 31 * result + (date != null ? date.hashCode() : 0);
-        result = 31 * result + (hall != null ? hall.hashCode() : 0);
-        return result;
+    public Event(String name, Date date, Hall hall) throws InvalidArgument {
+        setDate(date);
+        setHall(hall);
+        setName(name);
     }
 
     /**
@@ -66,6 +37,19 @@ public class Event {
     }
 
     /**
+     * Sets the name of the event.
+     *
+     * @param name the name of the event
+     * @throws InvalidArgument if the name is null or empty
+     */
+    public void setName(String name) throws InvalidArgument {
+        if (name == null || name.isEmpty()) {
+            throw new InvalidArgument("Event name cannot be null or empty");
+        }
+        this.name = name;
+    }
+
+    /**
      * Gets the date of the event.
      *
      * @return the date of the event
@@ -75,27 +59,71 @@ public class Event {
     }
 
     /**
+     * Sets the date of the event.
+     *
+     * @param date the date of the event
+     * @throws InvalidArgument if the date is null
+     */
+    public void setDate(Date date) throws InvalidArgument {
+        if (date == null) {
+            throw new InvalidArgument("Event date cannot be null");
+        }
+        this.date = date;
+    }
+
+    /**
      * Gets the hall associated with the event.
      *
      * @return the hall associated with the event
      */
-    public Hall getHalls() {
+    public Hall getHall() {
         return hall;
     }
 
     /**
-     * Returns a string representation of the event.
+     * Sets the hall associated with the event.
      *
-     * @return a string representation of the event
+     * @param hall the hall associated with the event
+     * @throws InvalidArgument if the hall is null
+     */
+    public void setHall(Hall hall) throws InvalidArgument {
+        if (hall == null) {
+            throw new InvalidArgument("Event hall cannot be null");
+        }
+        this.hall = hall;
+    }
+
+    /**
+     * Compares this Event to the specified object. The result is true if and only if the argument is not null and is an Event object with the same name, date, and hall.
+     *
+     * @param o the object to compare
+     * @return true if the objects are equal, false otherwise
+     */
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Event event = (Event) o;
+        return Objects.equals(name, event.name) && Objects.equals(date, event.date) && Objects.equals(hall, event.hall);
+    }
+
+    /**
+     * Returns a hash code value for the Event.
+     *
+     * @return a hash code value for this Event
+     */
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, date, hall);
+    }
+
+    /**
+     * Returns a string representation of the Event.
+     *
+     * @return a string representation of the Event
      */
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("\nEvent\n");
-        sb.append("name: '").append(name).append("'");
-        sb.append(",\n");
-        sb.append("date: '").append(date).append("'");
-        sb.append(",\n");
-        sb.append("hall: '").append(hall).append("'");
-        return sb.toString();
+        return name + " ";
     }
 }
